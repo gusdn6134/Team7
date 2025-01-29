@@ -2,21 +2,20 @@
 
 #include "Include.h"
 #include "ToolView.h"
+#include "CObj.h"
 
-class CBackGround
+class CBackGround : public CObj
 {
 public:
 	CBackGround();
 	~CBackGround();
 
 public:
-	HRESULT		Initialize();
-	void		Update();
-	void		Render();
-	void		Set_Ratio(D3DXMATRIX* pOut, float _fX, float _fY);
-	void		Release();
+	HRESULT		Initialize() override;
+	void		Update() override;
+	void		Render() override;
+	void		Release() override;
 
-	void		Set_MainView(CToolView* pMainView) { m_pMainView = pMainView; }
 	void		Set_Id(int num) { m_byDrawID = num; }
 
 private:

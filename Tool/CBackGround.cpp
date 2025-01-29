@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "CBackGround.h"
 #include "CTextureMgr.h"
+#include "MainFrm.h"
 
-CBackGround::CBackGround() : m_byDrawID(1)
+CBackGround::CBackGround() : m_byDrawID(1), m_pMainView(nullptr)
 {
     ZeroMemory(&m_tinfo, sizeof(INFO));
     D3DXMatrixIdentity(&m_tinfo.matWorld);
@@ -15,6 +16,9 @@ CBackGround::~CBackGround()
 
 HRESULT CBackGround::Initialize()
 {
+    GET_TOOLVIEW
+    m_pMainView = pView;
+
     return E_NOTIMPL;
 }
 
@@ -42,7 +46,7 @@ void CBackGround::Render()
     float	fX = WINCX / float(rc.right - rc.left);
     float	fY = WINCY / float(rc.bottom - rc.top);
 
-    Set_Ratio(&m_tinfo.matWorld, fX, fY);
+   Set_Ratio(&m_tinfo.matWorld, fX, fY);
 
     CDevice::Get_Instance()->Get_Sprite()->SetTransform(&m_tinfo.matWorld);
 
@@ -57,20 +61,6 @@ void CBackGround::Render()
         nullptr,		// 출력할 이미지의 중심 좌표 vec3 주소, null인 경우 0, 0 이미지 중심
         nullptr,		// 위치 좌표에 대한 vec3 주소, null인 경우 스크린 상 0, 0 좌표 출력	
         D3DCOLOR_ARGB(255, 255, 255, 255)); // 출력할 이미지와 섞을 색상 값, 0xffffffff를 넘겨주면 섞지 않고 원본 색상 유지
-
-}
-
-void CBackGround::Set_Ratio(D3DXMATRIX* pOut, float _fX, float _fY)
-{
-    pOut->_11 *= _fX;
-    pOut->_21 *= _fX;
-    pOut->_31 *= _fX;
-    pOut->_41 *= _fX;
-
-    pOut->_12 *= _fY;
-    pOut->_22 *= _fY;
-    pOut->_32 *= _fY;
-    pOut->_42 *= _fY;
 }
 
 void CBackGround::Release()

@@ -23,7 +23,4 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	// 그냥 썼음
-	CString m_strTemp;
-	CString m_strCopy;
-	afx_msg void OnBnClickedButton1();
 };

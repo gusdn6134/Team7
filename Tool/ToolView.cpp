@@ -16,6 +16,8 @@
 #include "CTextureMgr.h"
 #include "MainFrm.h"
 #include "CTerrain.h"
+#include "CAbstractFactory.h"
+#include "CObjMgr.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -101,9 +103,8 @@ void CToolView::OnInitialUpdate()
 		return;
 	}
 
-	m_pBackGround = new CBackGround();
-	m_pBackGround->Set_MainView(this);
-
+	// 배경 생산
+	CObjMgr::Get_Instance()->AddObject(OBJ_BackGround, CAbstractFactory<CBackGround>::Create());
 }
 
 void CToolView::OnDraw(CDC* /*pDC*/)
@@ -115,18 +116,16 @@ void CToolView::OnDraw(CDC* /*pDC*/)
 
 	m_pDevice->Render_Begin();
 
-	m_pBackGround->Render();
+	CObjMgr::Get_Instance()->Render();
 
 	m_pDevice->Render_End();
-
-
 }
 
 void CToolView::OnDestroy()
 {
 	CScrollView::OnDestroy();
 
-	Safe_Delete<CBackGround*>(m_pBackGround);
+	CObjMgr::Destroy_Instance();
 	CTextureMgr::Destroy_Instance();
 	m_pDevice->Destroy_Instance();
 

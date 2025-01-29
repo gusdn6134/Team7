@@ -23,6 +23,17 @@ extern HWND		g_hWnd;
 #define		DIAMOND			0x02		// -> 0010
 #define		SAPPHIRE		0x04		// -> 0100
 
+#define GET_TOOLVIEW									                              \
+CMainFrame* pMainFrm = (CMainFrame*)AfxGetMainWnd();								  \
+CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));  \
+
+#define GET_ScrollView																		   \
+CMainFrame* pMainFrm = (CMainFrame*)AfxGetMainWnd();										   \
+CScrollView* pScrollView = dynamic_cast<CScrollView*>(pMainFrm->m_MainSplitter.GetPane(0, 0)); \
+
+#define GET_MyFoem																	  \
+CMainFrame* pMainFrm = (CMainFrame*)AfxGetMainWnd();								  \
+CMyForm* pMyForm = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));  \
 
 
 

@@ -4,6 +4,11 @@
 #include "pch.h"
 #include "Tool.h"
 #include "CMyForm.h"
+#include "CObjMgr.h"
+#include "CAbstractFactory.h"
+#include "CBackGround.h"
+#include "MainFrm.h"
+
 
 
 // CMyForm
@@ -87,22 +92,28 @@ void CMyForm::OnInitialUpdate()
 void CMyForm::OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	int nCurSel = m_TabCtrl.GetCurSel();	// 현재 선택된 탭의 인덱스
+	GET_ScrollView
 
 	switch (nCurSel)
 	{
 	case 0:		// 첫번째 탭을 눌렀으면 
 		m_MapTool.ShowWindow(SW_SHOW);
 		m_UnitTool.ShowWindow(SW_HIDE);
+		CObjMgr::Get_Instance()->AddObject(OBJ_BackGround, CAbstractFactory<CBackGround>::Create());
 		break;
 	case 1:		
 		m_UnitTool.ShowWindow(SW_HIDE);
 		m_MapTool.ShowWindow(SW_HIDE);
+		CObjMgr::Get_Instance()->Delete_ID(OBJ_BackGround);
 		break;
 	case 2:		
 		m_MapTool.ShowWindow(SW_HIDE);
 		m_UnitTool.ShowWindow(SW_SHOW);
+		CObjMgr::Get_Instance()->Delete_ID(OBJ_BackGround);
 		break;
 	}
+
+	pScrollView->Invalidate(TRUE);
 
 	*pResult = 0;
 }
