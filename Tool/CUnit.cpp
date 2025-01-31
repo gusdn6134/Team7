@@ -1,32 +1,28 @@
 #include "pch.h"
-#include "CBackGround.h"
+#include "CUnit.h"
 #include "CTextureMgr.h"
-#include "MainFrm.h"
 
-CBackGround::CBackGround() : m_byDrawID(1), m_pMainView(nullptr)
+CUnit::CUnit()
 {
-    ZeroMemory(&m_tinfo, sizeof(INFO));
-    D3DXMatrixIdentity(&m_tinfo.matWorld);
 }
 
-CBackGround::~CBackGround()
+CUnit::~CUnit()
 {
-    Release();
 }
 
-HRESULT CBackGround::Initialize()
+HRESULT CUnit::Initialize()
 {
     GET_TOOLVIEW
-    m_pMainView = pView;
+        m_pMainView = pView;
 
     return E_NOTIMPL;
 }
 
-void CBackGround::Update()
+void CUnit::Update()
 {
 }
 
-void CBackGround::Render()
+void CUnit::Render()
 {
     if (!m_bIsRender) return;
 
@@ -47,11 +43,11 @@ void CBackGround::Render()
     float	fX = WINCX / float(rc.right - rc.left);
     float	fY = WINCY / float(rc.bottom - rc.top);
 
-   Set_Ratio(&m_tinfo.matWorld, fX, fY);
+    Set_Ratio(&m_tinfo.matWorld, fX, fY);
 
     CDevice::Get_Instance()->Get_Sprite()->SetTransform(&m_tinfo.matWorld);
 
-    const TEXINFO* pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"BackGround", L"BackGround_", m_byDrawID);
+    const TEXINFO* pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Player", m_pStateKey, m_byDrawID);
 
     float	fCenterX = pTexInfo->tImgInfo.Width / 2.f;
     float	fCenterY = pTexInfo->tImgInfo.Height / 2.f;
@@ -64,7 +60,7 @@ void CBackGround::Render()
         D3DCOLOR_ARGB(255, 255, 255, 255)); // 출력할 이미지와 섞을 색상 값, 0xffffffff를 넘겨주면 섞지 않고 원본 색상 유지
 }
 
-void CBackGround::Release()
+void CUnit::Release()
 {
 
 }

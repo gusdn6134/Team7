@@ -240,6 +240,8 @@ void CUnitTool::OnImgKeySelChange()
     if (iter == m_mutimapTex.end()) return;
 
     // 리스트 클리어 해야함
+    ListBox_Frame.ResetContent();
+
     for (size_t i = 0; i < iter->second.size(); i++)
 	{
 		CString temp;

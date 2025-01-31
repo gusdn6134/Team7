@@ -2,7 +2,7 @@
 class CObj
 {
 public:
-	CObj() {}
+	CObj() : m_bIsRender(false) {}
 	~CObj() {}
 
 public:

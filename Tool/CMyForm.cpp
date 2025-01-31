@@ -86,6 +86,7 @@ void CMyForm::OnInitialUpdate()
 	// 초기 선택 탭 설정
 	m_TabCtrl.SetCurSel(0);
 	m_MapTool.ShowWindow(SW_SHOW);	// 첫 페이지는 SHOW
+	CObjMgr::Get_Instance()->Render_ID(OBJ_BackGround, true);
 
 }
 
@@ -99,17 +100,17 @@ void CMyForm::OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult)
 	case 0:		// 첫번째 탭을 눌렀으면 
 		m_MapTool.ShowWindow(SW_SHOW);
 		m_UnitTool.ShowWindow(SW_HIDE);
-		CObjMgr::Get_Instance()->AddObject(OBJ_BackGround, CAbstractFactory<CBackGround>::Create());
+		CObjMgr::Get_Instance()->Render_ID(OBJ_BackGround, true);
 		break;
 	case 1:		
 		m_UnitTool.ShowWindow(SW_HIDE);
 		m_MapTool.ShowWindow(SW_HIDE);
-		CObjMgr::Get_Instance()->Delete_ID(OBJ_BackGround);
+		CObjMgr::Get_Instance()->Render_ID(OBJ_BackGround, false);
 		break;
 	case 2:		
 		m_MapTool.ShowWindow(SW_HIDE);
 		m_UnitTool.ShowWindow(SW_SHOW);
-		CObjMgr::Get_Instance()->Delete_ID(OBJ_BackGround);
+		CObjMgr::Get_Instance()->Render_ID(OBJ_BackGround, false);
 		break;
 	}
 
