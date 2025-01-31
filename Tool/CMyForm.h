@@ -2,6 +2,7 @@
 
 #include "CUnitTool.h"
 #include "CMapTool.h"
+#include "pch.h"
 
 class CMyForm : public CFormView
 {

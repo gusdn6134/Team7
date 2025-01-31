@@ -159,7 +159,7 @@ protected:
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnListBackGroundChange();
+
 };
 
 CAboutDlg::CAboutDlg() noexcept : CDialogEx(IDD_ABOUTBOX)
@@ -187,5 +187,4 @@ BOOL CToolApp::OnIdle(LONG lCount)
 
 	return CWinApp::OnIdle(lCount);
 }
-
 

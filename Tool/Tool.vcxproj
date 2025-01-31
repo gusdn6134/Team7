@@ -187,11 +187,14 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CAbstractFactory.h" />
     <ClInclude Include="CBackGround.h" />
     <ClInclude Include="CDevice.h" />
     <ClInclude Include="CMapTool.h" />
     <ClInclude Include="CMultiTexture.h" />
     <ClInclude Include="CMyForm.h" />
+    <ClInclude Include="CObj.h" />
+    <ClInclude Include="CObjMgr.h" />
     <ClInclude Include="CSingleTexture.h" />
     <ClInclude Include="CTerrain.h" />
     <ClInclude Include="CTexture.h" />
@@ -212,6 +215,8 @@
     <ClCompile Include="CMapTool.cpp" />
     <ClCompile Include="CMultiTexture.cpp" />
     <ClCompile Include="CMyForm.cpp" />
+    <ClCompile Include="CObj.cpp" />
+    <ClCompile Include="CObjMgr.cpp" />
     <ClCompile Include="CSingleTexture.cpp" />
     <ClCompile Include="CTerrain.cpp" />
     <ClCompile Include="CTexture.cpp" />

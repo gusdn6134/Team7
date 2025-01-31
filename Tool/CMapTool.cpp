@@ -11,6 +11,7 @@
 #include "Include.h"
 #include "CTextureMgr.h"
 #include "CMultiTexture.h"
+#include "CObjMgr.h"
 
 // CMapTool 대화 상자
 
@@ -42,7 +43,6 @@ void CMapTool::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CMapTool, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMapTool::OnMapSizeChange)
-
 	ON_LBN_SELCHANGE(IDC_LIST1, &CMapTool::OnBG_ListBox)
 END_MESSAGE_MAP()
 
@@ -74,7 +74,6 @@ BOOL CMapTool::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-
 	/*--------------------------
 	 백그라운드 이미지 추가
 	--------------------------*/
@@ -83,7 +82,7 @@ BOOL CMapTool::OnInitDialog()
 		TEX_MULTI, L"BackGround", L"BackGround_", 5)))
 	{
 		AfxMessageBox(L"Terrain Texture Insert Failed");
-		return E_FAIL;
+		return 1;
 	}
 
 	const auto& texMap = CTextureMgr::Get_Instance()->Get_mapTex();
@@ -103,7 +102,7 @@ BOOL CMapTool::OnInitDialog()
 	}
 	else 
 	{
-		return E_FAIL;
+		return 1;
 	}
 	/*--------------------------
 	--------------------------*/
@@ -115,11 +114,6 @@ void CMapTool::OnBG_ListBox()
 	UpdateData(TRUE);
 
 	int	iIndex = m_listBackGround.GetCurSel();
-
-	CMainFrame* pMainFrm = (CMainFrame*)AfxGetMainWnd();
-	CToolView* pView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
-	CScrollView* pScrollView = dynamic_cast<CScrollView*>(pMainFrm->m_MainSplitter.GetPane(0, 0));
-
 	{
 		CString	strFindName;
 		auto	iter = m_mutimapTex.find(L"BackGround_");
@@ -129,15 +123,16 @@ void CMapTool::OnBG_ListBox()
 		m_MapSizeX = iter->second[iIndex]->tImgInfo.Width;
 		m_MapSizeY = iter->second[iIndex]->tImgInfo.Height;
 	}
-
-	// 이미지 크기에 따른 스크롤 값 조정
+	 
+	GET_ScrollView // 스크롤 뷰 가져오는 매크로
 	if (pScrollView != nullptr)
 	{
+		// 이미지 크기에 따른 스크롤 값 조정
 		pScrollView->SetScrollSizes(MM_TEXT, CSize(m_MapSizeX, m_MapSizeY));
 	}
 
-	pView->Get_pBackGround()->Set_Id(iIndex);
+	dynamic_cast<CBackGround*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_BackGround)->front())->Set_Id(iIndex);
 
-	pView->Invalidate(TRUE);
+	pScrollView->Invalidate(TRUE);
 	UpdateData(FALSE);
 }

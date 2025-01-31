@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "afxdialogex.h"
-
+#include "CTexture.h"
 
 // CUnitTool 대화 상자
 
@@ -22,8 +22,28 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	// 그냥 썼음
-	CString m_strTemp;
-	CString m_strCopy;
-	afx_msg void OnBnClickedButton1();
+
+	afx_msg void OnAnimePlayButton();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+
+public:
+	virtual BOOL OnInitDialog();
+	afx_msg void OnImgKeySelChange();
+
+
+public:
+	void Link_ImageKey();
+	HRESULT Insert_Unit_Texture();
+
+
+public:
+	// ImageKey
+	CListBox ListBox_ImageKey;
+	map<wstring, vector<TEXINFO*>> m_mutimapTex;
+
+	//Frame
+	CListBox ListBox_Frame;
+
+
+
 };
