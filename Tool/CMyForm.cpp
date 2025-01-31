@@ -101,16 +101,19 @@ void CMyForm::OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult)
 		m_MapTool.ShowWindow(SW_SHOW);
 		m_UnitTool.ShowWindow(SW_HIDE);
 		CObjMgr::Get_Instance()->Render_ID(OBJ_BackGround, true);
+		CObjMgr::Get_Instance()->Render_ID(OBJ_Unit, false);
 		break;
 	case 1:		
 		m_UnitTool.ShowWindow(SW_HIDE);
 		m_MapTool.ShowWindow(SW_HIDE);
 		CObjMgr::Get_Instance()->Render_ID(OBJ_BackGround, false);
+		CObjMgr::Get_Instance()->Render_ID(OBJ_Unit, false);
 		break;
 	case 2:		
 		m_MapTool.ShowWindow(SW_HIDE);
 		m_UnitTool.ShowWindow(SW_SHOW);
 		CObjMgr::Get_Instance()->Render_ID(OBJ_BackGround, false);
+		CObjMgr::Get_Instance()->Render_ID(OBJ_Unit, true);
 		break;
 	}
 

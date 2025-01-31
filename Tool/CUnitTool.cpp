@@ -7,6 +7,9 @@
 #include "CUnitTool.h"
 #include "CTextureMgr.h"
 #include "CMultiTexture.h"
+#include "CUnit.h"
+#include "CObjMgr.h"
+#include "MainFrm.h"
 
 
 // CUnitTool 대화 상자
@@ -258,19 +261,13 @@ void CUnitTool::OnFrameSelChange()
 {
     UpdateData(TRUE);
 
-    int	iIndex = ListBox_ImageKey.GetCurSel();
+    int	iIndex = ListBox_Frame.GetCurSel();
 
     const auto& texMap = CTextureMgr::Get_Instance()->Get_mapTex();
-    auto it = texMap.find(L"BackGround");
-    if (it != texMap.end())
-    {
-        CTexture* background = it->second;
-        m_mutimapTex = dynamic_cast<CMultiTexture*>(background)->Get_MultiTex();
-        auto iter = m_mutimapTex.find(m_ImgFindName.GetString());
-
-
-    }
-
+   
+    dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->Set_Path(m_ImgFindName.GetString(), iIndex);
+    GET_ScrollView // 스크롤 뷰 가져오는 매크로
+    pScrollView->Invalidate(TRUE);
 
     UpdateData(FALSE);
 }

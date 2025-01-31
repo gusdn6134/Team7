@@ -17,7 +17,10 @@ public:
 
     void Set_Path(const TCHAR* _pStateKey, int _id)
     {
-        m_pStateKey = _pStateKey;
+        CString szFullPath(_pStateKey);
+        szFullPath += _T("_"); 
+        m_pStateKey = szFullPath; 
+
         m_byDrawID = _id;
     }
 

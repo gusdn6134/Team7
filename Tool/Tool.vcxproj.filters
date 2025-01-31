@@ -139,7 +139,7 @@
       <Filter>03. Manager\03. AbstractFactory</Filter>
     </ClInclude>
     <ClInclude Include="CUnit.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>04. Etc\04. Unit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -195,7 +195,7 @@
       <Filter>03. Manager\02. CObjMgr\CObj</Filter>
     </ClCompile>
     <ClCompile Include="CUnit.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>04. Etc\04. Unit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

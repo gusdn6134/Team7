@@ -3,8 +3,10 @@
 #include "CTextureMgr.h"
 #include "MainFrm.h"
 
-CUnit::CUnit()
+CUnit::CUnit() : m_byDrawID(0), m_pMainView(nullptr), m_pStateKey(nullptr)
 {
+    ZeroMemory(&m_tinfo, sizeof(INFO));
+    D3DXMatrixIdentity(&m_tinfo.matWorld);
 }
 
 CUnit::~CUnit()
@@ -26,6 +28,7 @@ void CUnit::Update()
 void CUnit::Render()
 {
     if (!m_bIsRender) return;
+    if (m_pStateKey == nullptr) return;
 
     D3DXMATRIX	matScale, matTrans;
 
