@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(CUnitTool, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON7, &CUnitTool::OnAnimePlayButton)
     ON_WM_TIMER()
     ON_LBN_SELCHANGE(IDC_LIST1, &CUnitTool::OnImgKeySelChange)
+    ON_LBN_SELCHANGE(IDC_LIST2, &CUnitTool::OnFrameSelChange)
 END_MESSAGE_MAP()
 
 
@@ -234,9 +235,8 @@ void CUnitTool::OnImgKeySelChange()
 
     int	iIndex = ListBox_ImageKey.GetCurSel();
 
-    CString	strFindName;
-    ListBox_ImageKey.GetText(iIndex, strFindName);
-    auto	iter = m_mutimapTex.find(strFindName.GetString());
+    ListBox_ImageKey.GetText(iIndex, m_ImgFindName);
+    auto	iter = m_mutimapTex.find(m_ImgFindName.GetString());
     if (iter == m_mutimapTex.end()) return;
 
     // 리스트 클리어 해야함
@@ -248,6 +248,28 @@ void CUnitTool::OnImgKeySelChange()
 		temp.Format(L"%d", i);
         ListBox_Frame.AddString(temp);
 	}
+
+
+    UpdateData(FALSE);
+}
+
+
+void CUnitTool::OnFrameSelChange()
+{
+    UpdateData(TRUE);
+
+    int	iIndex = ListBox_ImageKey.GetCurSel();
+
+    const auto& texMap = CTextureMgr::Get_Instance()->Get_mapTex();
+    auto it = texMap.find(L"BackGround");
+    if (it != texMap.end())
+    {
+        CTexture* background = it->second;
+        m_mutimapTex = dynamic_cast<CMultiTexture*>(background)->Get_MultiTex();
+        auto iter = m_mutimapTex.find(m_ImgFindName.GetString());
+
+
+    }
 
 
     UpdateData(FALSE);

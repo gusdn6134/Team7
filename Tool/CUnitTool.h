@@ -40,10 +40,12 @@ public:
 	// ImageKey
 	CListBox ListBox_ImageKey;
 	map<wstring, vector<TEXINFO*>> m_mutimapTex;
+	CString	m_ImgFindName;
 
 	//Frame
 	CListBox ListBox_Frame;
 
 
 
+	afx_msg void OnFrameSelChange();
 };
