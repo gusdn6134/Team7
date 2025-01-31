@@ -3,7 +3,7 @@
 #include "CTextureMgr.h"
 #include "MainFrm.h"
 
-CUnit::CUnit() : m_byDrawID(0), m_pMainView(nullptr), m_pStateKey(nullptr)
+CUnit::CUnit() : m_byDrawID(0), m_pMainView(nullptr)
 {
     ZeroMemory(&m_tinfo, sizeof(INFO));
     D3DXMatrixIdentity(&m_tinfo.matWorld);
@@ -11,6 +11,7 @@ CUnit::CUnit() : m_byDrawID(0), m_pMainView(nullptr), m_pStateKey(nullptr)
 
 CUnit::~CUnit()
 {
+    Release();
 }
 
 HRESULT CUnit::Initialize()
@@ -23,12 +24,13 @@ HRESULT CUnit::Initialize()
 
 void CUnit::Update()
 {
+   
 }
 
 void CUnit::Render()
 {
     if (!m_bIsRender) return;
-    if (m_pStateKey == nullptr) return;
+    if (m_pStateKey == L"") return;
 
     D3DXMATRIX	matScale, matTrans;
 
@@ -51,7 +53,7 @@ void CUnit::Render()
 
     CDevice::Get_Instance()->Get_Sprite()->SetTransform(&m_tinfo.matWorld);
 
-    const TEXINFO* pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Player", m_pStateKey, m_byDrawID);
+    const TEXINFO* pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Player", m_pStateKey.GetString(), m_byDrawID);
 
     float	fCenterX = pTexInfo->tImgInfo.Width / 2.f;
     float	fCenterY = pTexInfo->tImgInfo.Height / 2.f;
@@ -67,5 +69,5 @@ void CUnit::Render()
 
 void CUnit::Release()
 {
-
+    m_pStateKey.ReleaseBuffer();
 }

@@ -7,7 +7,7 @@ class CUnit : public CObj
 {
 public:
     CUnit();
-    ~CUnit();
+    virtual ~CUnit();
 
 public:
     HRESULT Initialize() override;
@@ -15,20 +15,23 @@ public:
     void Render() override;
     void Release() override;
 
-    void Set_Path(const TCHAR* _pStateKey, int _id)
+   void Set_Path(const TCHAR* _pStateKey, int _id)
     {
-        CString szFullPath(_pStateKey);
-        szFullPath += _T("_"); 
-        m_pStateKey = szFullPath; 
+       if (_pStateKey)
+           m_pStateKey.Format(_T("%s"), _pStateKey);
+       else
+           m_pStateKey.Empty();
 
         m_byDrawID = _id;
     }
 
 public:
+    CString m_pStateKey;
+
     INFO m_tinfo;
     CToolView* m_pMainView;
 
     int m_byDrawID;
-    const TCHAR* m_pStateKey;
+  
 };
 

@@ -3,7 +3,7 @@ class CObj
 {
 public:
 	CObj() : m_bIsRender(false) {}
-	~CObj() {}
+	virtual ~CObj() {}
 
 public:
 	virtual HRESULT		Initialize() PURE;
