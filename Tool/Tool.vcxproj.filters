@@ -61,14 +61,14 @@
     <Filter Include="04. Etc\02. BackGround">
       <UniqueIdentifier>{cce93406-1869-4e9c-9080-ecc3e2e9e8f8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. Manager\03.AbstractFactory">
-      <UniqueIdentifier>{3ca287ad-7254-4a6a-a86b-3944d98e83ef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. Manager\02. CObjMgr">
       <UniqueIdentifier>{1af4c893-a6a3-4dc0-8747-fc24c3e1b384}</UniqueIdentifier>
     </Filter>
     <Filter Include="03. Manager\02. CObjMgr\CObj">
       <UniqueIdentifier>{90a854af-2fbe-4e8c-a94c-a6290fd82110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Manager\03. AbstractFactory">
+      <UniqueIdentifier>{3ca287ad-7254-4a6a-a86b-3944d98e83ef}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -133,7 +133,7 @@
       <Filter>03. Manager\02. CObjMgr\CObj</Filter>
     </ClInclude>
     <ClInclude Include="CAbstractFactory.h">
-      <Filter>03. Manager\03.AbstractFactory</Filter>
+      <Filter>03. Manager\03. AbstractFactory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

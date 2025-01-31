@@ -43,7 +43,6 @@ void CMapTool::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CMapTool, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMapTool::OnMapSizeChange)
-
 	ON_LBN_SELCHANGE(IDC_LIST1, &CMapTool::OnBG_ListBox)
 END_MESSAGE_MAP()
 
@@ -75,7 +74,6 @@ BOOL CMapTool::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-
 	/*--------------------------
 	 백그라운드 이미지 추가
 	--------------------------*/
@@ -84,7 +82,7 @@ BOOL CMapTool::OnInitDialog()
 		TEX_MULTI, L"BackGround", L"BackGround_", 5)))
 	{
 		AfxMessageBox(L"Terrain Texture Insert Failed");
-		return E_FAIL;
+		return 1;
 	}
 
 	const auto& texMap = CTextureMgr::Get_Instance()->Get_mapTex();
@@ -104,7 +102,7 @@ BOOL CMapTool::OnInitDialog()
 	}
 	else 
 	{
-		return E_FAIL;
+		return 1;
 	}
 	/*--------------------------
 	--------------------------*/

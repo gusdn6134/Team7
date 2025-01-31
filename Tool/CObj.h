@@ -13,5 +13,9 @@ public:
 
 	virtual void		Set_Ratio(D3DXMATRIX* pOut, float _fX, float _fY);
 
+public:
+	void Set_Render(bool render) { m_bIsRender = render; }
+public:
+	bool m_bIsRender;
 };
 
