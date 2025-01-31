@@ -46,103 +46,38 @@ END_MESSAGE_MAP()
 
 void CUnitTool::OnAnimePlayButton()
 {
-    //UpdateData(TRUE);
+    UpdateData(TRUE);
 
-    //int iIndex = m_ListBox2.GetCurSel();
-    //if (iIndex == LB_ERR)
-    //{
-    //    // 선택된 유닛이 없으면 초기화
-    //    m_ImagePaths.clear();
-    //    m_ListBox.ResetContent();
-    //    KillTimer(m_AnimationTimer);
-    //    CClientDC dc(&m_Picture);
-    //    dc.FillSolidRect(CRect(0, 0, 100, 100), RGB(255, 255, 255)); // 빈 화면
-    //    return;
-    //}
+    if (ListBox_Frame.GetCount() != 0)
+    {
+        // 기존 타이머가 있으면 제거 (중복 방지)
+        if (m_AnimationTimer != 0)
+        {
+            KillTimer(m_AnimationTimer);
+        }
 
-    //CString strSelectedUnit;
-    //m_ListBox2.GetText(iIndex, strSelectedUnit);
+        m_CurrentFrameIndex = 0;  // 애니메이션 시작 시 첫 프레임부터
+        ListBox_Frame.SetCurSel(m_CurrentFrameIndex);  // 첫 프레임 선택
+        m_AnimationTimer = SetTimer(1, 200, NULL); // 100ms 간격으로 타이머 실행
+    }
 
-    //int iTypeIndex = m_ListBox3.GetCurSel();
-    //if (iTypeIndex == LB_ERR)
-    //    return;
-
-    //CString strSelectedType;
-    //m_ListBox3.GetText(iTypeIndex, strSelectedType);
-
-
-    //m_ImagePaths.clear();
-    //m_ListBox.ResetContent();
-    //m_CurrentFrameIndex = 0;
-
-    //auto itType = m_mapCategory.find(strSelectedType);
-    //if (itType != m_mapCategory.end())
-    //{
-    //    auto itUnit = itType->second.find(strSelectedUnit);
-    //    if (itUnit != itType->second.end())
-    //    {
-
-    //        for (auto& imagePath : itUnit->second)
-    //        {
-    //            m_ImagePaths.push_back(imagePath);
-
-    //            CString fileName = PathFindFileName(imagePath);
-    //            m_ListBox.AddString(fileName);
-    //        }
-    //    }
-    //}
-
-
-    //if (!m_ImagePaths.empty())
-    //{
-    //    m_AnimationTimer = SetTimer(1, 100, NULL); // 1번 타이머를 100ms 간격!!
-    //}
-
-    //UpdateData(FALSE);
+    UpdateData(FALSE);
 }
 
 
 void CUnitTool::OnTimer(UINT_PTR nIDEvent)
 {
-    //if (nIDEvent == 1 && !m_ImagePaths.empty())
-    //{
+    if (nIDEvent == 1 && ListBox_Frame.GetCount() != 0)
+    {
+        // 다음 프레임으로 이동
+        m_CurrentFrameIndex = (m_CurrentFrameIndex + 1) % ListBox_Frame.GetCount();
+        ListBox_Frame.SetCurSel(m_CurrentFrameIndex);
+        dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->Set_Path(m_ImgFindName.GetString(), m_CurrentFrameIndex);
 
-    //    CString currentImagePath = m_ImagePaths[m_CurrentFrameIndex];
+        m_Scrollview->Invalidate(TRUE);
+    }
 
-
-    //    CImage image;
-    //    if (FAILED(image.Load(currentImagePath)))
-    //    {
-    //        AfxMessageBox(_T("이미지 로드 실패: ") + currentImagePath);
-    //        KillTimer(m_AnimationTimer);
-    //        return;
-    //    }
-
-
-    //    CClientDC dc(&m_Picture);
-    //    CRect rect;
-    //    m_Picture.GetClientRect(&rect);
-
-    //    dc.FillSolidRect(rect, RGB(255, 255, 255));
-    //    image.Draw(dc, rect);
-
-
-    //    CString fileName = PathFindFileName(currentImagePath);
-    //    for (int i = 0; i < m_ListBox.GetCount(); ++i)
-    //    {
-    //        CString listItem;
-    //        m_ListBox.GetText(i, listItem);
-    //        if (listItem == fileName)
-    //        {
-    //            m_ListBox.SetCurSel(i);
-    //            break;
-    //        }
-    //    }
-
-    //    m_CurrentFrameIndex = (m_CurrentFrameIndex + 1) % m_ImagePaths.size();
-    //}
-
-    //CDialog::OnTimer(nIDEvent);
+    CDialog::OnTimer(nIDEvent);
 }
 
 
@@ -159,6 +94,8 @@ BOOL CUnitTool::OnInitDialog()
         ListBox_Frame.SubclassDlgItem(IDC_LIST2, this);
     }
 
+    GET_ScrollView
+    m_Scrollview = pScrollView;
    
 
     Insert_Unit_Texture(); // 멀티 택스쳐 추가
@@ -186,29 +123,36 @@ BOOL CUnitTool::OnInitDialog()
 
 HRESULT CUnitTool::Insert_Unit_Texture()
 {
-    if (FAILED(CTextureMgr::Get_Instance()->Insert_Texture(
-        L"../MapleStory/01.Player_Resource/Motion/Fly/fly_%d.png",
-        TEX_MULTI, L"Player", L"Fly", 2)))
-    {
-        AfxMessageBox(L"Terrain Texture Insert Failed");
-        return E_FAIL;
-    }
 
-    if (FAILED(CTextureMgr::Get_Instance()->Insert_Texture(
-        L"../MapleStory/01.Player_Resource/Motion/Heal/heal_%d.png",
-        TEX_MULTI, L"Player", L"Heal", 2)))
-    {
-        AfxMessageBox(L"Terrain Texture Insert Failed");
-        return E_FAIL;
-    }
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Fly/fly_%d.png",
+        TEX_MULTI, L"Player", L"Fly", 2);
 
-    if (FAILED(CTextureMgr::Get_Instance()->Insert_Texture(
-        L"../MapleStory/01.Player_Resource/Motion/Jump/jump_0.png",
-        TEX_MULTI, L"Player", L"Jump", 1)))
-    {
-        AfxMessageBox(L"Terrain Texture Insert Failed");
-        return E_FAIL;
-    }
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Heal/heal_%d.png",
+        TEX_MULTI, L"Player", L"Heal", 2);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Idle/alert_%d.png",
+        TEX_MULTI, L"Player", L"Idle", 5);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Jump/jump_0.png",
+        TEX_MULTI, L"Player", L"Jump", 1);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Ladder/ladder_%d.png",
+        TEX_MULTI, L"Player", L"Ladder", 2);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Prone/prone_%d.png",
+        TEX_MULTI, L"Player", L"Prone", 1);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/ProneStab/proneStab_%d.png",
+        TEX_MULTI, L"Player", L"ProneStab", 2);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Rope/rope_%d.png",
+        TEX_MULTI, L"Player", L"Rope", 2);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Shoot1/shoot1_%d.png",
+        TEX_MULTI, L"Player", L"Shoot1", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Shoot2/shoot2_%d.png",
+        TEX_MULTI, L"Player", L"Shoot2", 5);
 }
 
 void CUnitTool::Link_ImageKey()
@@ -266,8 +210,8 @@ void CUnitTool::OnFrameSelChange()
     const auto& texMap = CTextureMgr::Get_Instance()->Get_mapTex();
    
     dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->Set_Path(m_ImgFindName.GetString(), iIndex);
-    GET_ScrollView // 스크롤 뷰 가져오는 매크로
-    pScrollView->Invalidate(TRUE);
+
+    m_Scrollview->Invalidate(TRUE);
 
     UpdateData(FALSE);
 }
