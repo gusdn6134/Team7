@@ -2,8 +2,8 @@
 class CObj
 {
 public:
-	CObj() {}
-	~CObj() {}
+	CObj() : m_bIsRender(false) {}
+	virtual ~CObj() {}
 
 public:
 	virtual HRESULT		Initialize() PURE;

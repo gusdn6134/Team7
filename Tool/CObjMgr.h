@@ -20,6 +20,7 @@ public:
 	void Release();
 
 	void Delete_ID(OBJID eID);
+	void Render_ID(OBJID eID, bool _Render);
 
 private:
 	list<CObj*>		m_ObjList[OBJ_END];

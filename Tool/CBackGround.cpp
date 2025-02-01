@@ -28,6 +28,7 @@ void CBackGround::Update()
 
 void CBackGround::Render()
 {
+    if (!m_bIsRender) return;
 
     D3DXMATRIX	matScale, matTrans;
 

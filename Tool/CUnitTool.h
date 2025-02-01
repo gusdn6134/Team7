@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "afxdialogex.h"
 #include "CTexture.h"
-
 // CUnitTool 대화 상자
 
 class CUnitTool : public CDialog
@@ -29,21 +28,28 @@ public:
 public:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnImgKeySelChange();
-
+	afx_msg void OnFrameSelChange();
 
 public:
 	void Link_ImageKey();
-	HRESULT Insert_Unit_Texture();
 
 
 public:
 	// ImageKey
 	CListBox ListBox_ImageKey;
 	map<wstring, vector<TEXINFO*>> m_mutimapTex;
+	CString	m_ImgFindName;
 
 	//Frame
 	CListBox ListBox_Frame;
 
+	//Timer
+	UINT_PTR m_AnimationTimer;
+	int m_CurrentFrameIndex;
 
 
+	CScrollView* m_Scrollview;
+	afx_msg void OnPuaseButton();
+	CListBox ListBox_SkillName;
+	afx_msg void OnLbnSelchangeList_SkillName();
 };
