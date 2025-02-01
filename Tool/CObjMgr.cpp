@@ -54,3 +54,11 @@ void CObjMgr::Delete_ID(OBJID eID)
 
 	m_ObjList[eID].clear();
 }
+
+void CObjMgr::Render_ID(OBJID eID, bool _Render)
+{
+	for (auto& pObj : m_ObjList[eID])
+	{
+		pObj->Set_Render(_Render);
+	}
+}

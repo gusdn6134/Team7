@@ -70,6 +70,9 @@
     <Filter Include="03. Manager\03. AbstractFactory">
       <UniqueIdentifier>{3ca287ad-7254-4a6a-a86b-3944d98e83ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Etc\04. Unit">
+      <UniqueIdentifier>{0edb3e47-e899-4d59-b153-67794611cd34}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tool.h">
@@ -135,6 +138,9 @@
     <ClInclude Include="CAbstractFactory.h">
       <Filter>03. Manager\03. AbstractFactory</Filter>
     </ClInclude>
+    <ClInclude Include="CUnit.h">
+      <Filter>04. Etc\04. Unit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp">
@@ -187,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="CObj.cpp">
       <Filter>03. Manager\02. CObjMgr\CObj</Filter>
+    </ClCompile>
+    <ClCompile Include="CUnit.cpp">
+      <Filter>04. Etc\04. Unit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

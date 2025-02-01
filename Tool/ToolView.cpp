@@ -18,6 +18,7 @@
 #include "CTerrain.h"
 #include "CAbstractFactory.h"
 #include "CObjMgr.h"
+#include "CUnit.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -105,6 +106,12 @@ void CToolView::OnInitialUpdate()
 
 	// 배경 생산
 	CObjMgr::Get_Instance()->AddObject(OBJ_BackGround, CAbstractFactory<CBackGround>::Create());
+
+	// 유닛 생산
+	CObjMgr::Get_Instance()->AddObject(OBJ_Unit, CAbstractFactory<CUnit>::Create());
+
+
+
 }
 
 void CToolView::OnDraw(CDC* /*pDC*/)
