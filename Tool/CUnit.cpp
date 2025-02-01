@@ -17,7 +17,9 @@ CUnit::~CUnit()
 HRESULT CUnit::Initialize()
 {
     GET_TOOLVIEW
-        m_pMainView = pView;
+    m_pMainView = pView;
+
+    Init_Unit_Texture();
 
     return E_NOTIMPL;
 }
@@ -72,4 +74,34 @@ void CUnit::Render()
 void CUnit::Release()
 {
     m_pStateKey.ReleaseBuffer();
+}
+
+HRESULT CUnit::Init_Unit_Texture()
+{
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Fly/fly_%d.png",
+        TEX_MULTI, L"Player", L"Fly", 2);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Idle/alert_%d.png",
+        TEX_MULTI, L"Player", L"Idle", 5);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Jump/jump_0.png",
+        TEX_MULTI, L"Player", L"Jump", 1);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Ladder/ladder_%d.png",
+        TEX_MULTI, L"Player", L"Ladder", 2);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Prone/prone_%d.png",
+        TEX_MULTI, L"Player", L"Prone", 1);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/ProneStab/proneStab_%d.png",
+        TEX_MULTI, L"Player", L"ProneStab", 2);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Rope/rope_%d.png",
+        TEX_MULTI, L"Player", L"Rope", 2);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Shoot1/shoot1_%d.png",
+        TEX_MULTI, L"Player", L"Shoot1", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Shoot2/shoot2_%d.png",
+        TEX_MULTI, L"Player", L"Shoot2", 5);
 }

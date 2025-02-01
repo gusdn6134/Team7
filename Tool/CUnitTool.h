@@ -32,7 +32,6 @@ public:
 
 public:
 	void Link_ImageKey();
-	HRESULT Insert_Unit_Texture();
 
 
 public:
@@ -50,4 +49,5 @@ public:
 
 
 	CScrollView* m_Scrollview;
+	afx_msg void OnPuaseButton();
 };

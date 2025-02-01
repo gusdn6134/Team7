@@ -15,6 +15,8 @@ public:
     void Render() override;
     void Release() override;
 
+    HRESULT Init_Unit_Texture();
+
    void Set_Path(const TCHAR* _pStateKey, int _id)
     {
        if (_pStateKey)
