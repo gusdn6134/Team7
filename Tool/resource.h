@@ -48,6 +48,8 @@
 
 #define IDC_TAB1                        1400
 
+#define IDC_PICTURE                     1500
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

@@ -2,6 +2,7 @@
 #include "afxdialogex.h"
 #include "CTexture.h"
 #include "CBackGround.h"
+#include "resource.h"
 
 // CMapTool 대화 상자
 
@@ -32,12 +33,20 @@ public:	//value
 public: //BackGround
 	CString m_strBackGroundName;
 	CListBox m_listBackGround;
+	CListBox m_listTile;
 
 	map<wstring, vector<TEXINFO*>> m_mutimapTex;
+	map<wstring, vector<TEXINFO*>> m_mutiTileTex;
+	map<CString, CImage*>		m_mapPngImage;
+
 	CBackGround* m_pBackGround;
 
 public: //TilePath
 	virtual BOOL OnInitDialog();
 
 	afx_msg void OnBG_ListBox();
+	afx_msg void OnTile_ListBox();
+
+
+	CStatic m_Picture;
 };

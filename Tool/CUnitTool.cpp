@@ -59,6 +59,11 @@ BOOL CUnitTool::OnInitDialog()
         ListBox_Frame.SubclassDlgItem(IDC_LIST2, this);
     }
 
+    if (ListBox_SkillName.m_hWnd == NULL)
+    {
+        ListBox_SkillName.SubclassDlgItem(IDC_LIST6, this);
+    }
+
     GET_ScrollView
     m_Scrollview = pScrollView;
    
