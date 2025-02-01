@@ -46,18 +46,6 @@
     <Filter Include="04. Etc\01. Terrain">
       <UniqueIdentifier>{7218ab5d-d802-495c-a4d6-35cc525b2bc4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04. Etc\03. Dialog">
-      <UniqueIdentifier>{800e502d-3aab-4292-a929-e121c988ff7c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04. Etc\03. Dialog\00. MyForm">
-      <UniqueIdentifier>{c92246da-8483-4e7d-9385-650e25c85226}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04. Etc\03. Dialog\02. MapTool">
-      <UniqueIdentifier>{9b4cc16d-7b15-4978-bb1b-476d22927f39}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04. Etc\03. Dialog\03. UnitTool">
-      <UniqueIdentifier>{3bcadda5-186a-4054-bae3-5b2b188d86de}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04. Etc\02. BackGround">
       <UniqueIdentifier>{cce93406-1869-4e9c-9080-ecc3e2e9e8f8}</UniqueIdentifier>
     </Filter>
@@ -69,6 +57,21 @@
     </Filter>
     <Filter Include="03. Manager\03. AbstractFactory">
       <UniqueIdentifier>{3ca287ad-7254-4a6a-a86b-3944d98e83ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Etc\03. Tile">
+      <UniqueIdentifier>{c553ddbb-8591-4058-9520-ede826366fa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Etc\04. Dialog">
+      <UniqueIdentifier>{800e502d-3aab-4292-a929-e121c988ff7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Etc\04. Dialog\00. MyForm">
+      <UniqueIdentifier>{c92246da-8483-4e7d-9385-650e25c85226}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Etc\04. Dialog\02. MapTool">
+      <UniqueIdentifier>{9b4cc16d-7b15-4978-bb1b-476d22927f39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Etc\04. Dialog\03. UnitTool">
+      <UniqueIdentifier>{3bcadda5-186a-4054-bae3-5b2b188d86de}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -115,13 +118,13 @@
       <Filter>04. Etc\01. Terrain</Filter>
     </ClInclude>
     <ClInclude Include="CMyForm.h">
-      <Filter>04. Etc\03. Dialog\00. MyForm</Filter>
+      <Filter>04. Etc\04. Dialog\00. MyForm</Filter>
     </ClInclude>
     <ClInclude Include="CUnitTool.h">
-      <Filter>04. Etc\03. Dialog\03. UnitTool</Filter>
+      <Filter>04. Etc\04. Dialog\03. UnitTool</Filter>
     </ClInclude>
     <ClInclude Include="CMapTool.h">
-      <Filter>04. Etc\03. Dialog\02. MapTool</Filter>
+      <Filter>04. Etc\04. Dialog\02. MapTool</Filter>
     </ClInclude>
     <ClInclude Include="CBackGround.h">
       <Filter>04. Etc\02. BackGround</Filter>
@@ -171,13 +174,13 @@
       <Filter>04. Etc\01. Terrain</Filter>
     </ClCompile>
     <ClCompile Include="CMyForm.cpp">
-      <Filter>04. Etc\03. Dialog\00. MyForm</Filter>
+      <Filter>04. Etc\04. Dialog\00. MyForm</Filter>
     </ClCompile>
     <ClCompile Include="CUnitTool.cpp">
-      <Filter>04. Etc\03. Dialog\03. UnitTool</Filter>
+      <Filter>04. Etc\04. Dialog\03. UnitTool</Filter>
     </ClCompile>
     <ClCompile Include="CMapTool.cpp">
-      <Filter>04. Etc\03. Dialog\02. MapTool</Filter>
+      <Filter>04. Etc\04. Dialog\02. MapTool</Filter>
     </ClCompile>
     <ClCompile Include="CBackGround.cpp">
       <Filter>04. Etc\02. BackGround</Filter>
