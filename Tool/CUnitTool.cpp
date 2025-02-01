@@ -31,6 +31,7 @@ void CUnitTool::DoDataExchange(CDataExchange* pDX)
     CDialog::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_LIST1, ListBox_ImageKey);
     DDX_Control(pDX, IDC_LIST2, ListBox_Frame);
+    DDX_Control(pDX, IDC_LIST6, ListBox_SkillName);
 }
 
 
@@ -41,6 +42,7 @@ BEGIN_MESSAGE_MAP(CUnitTool, CDialog)
     ON_LBN_SELCHANGE(IDC_LIST1, &CUnitTool::OnImgKeySelChange)
     ON_LBN_SELCHANGE(IDC_LIST2, &CUnitTool::OnFrameSelChange)
     ON_BN_CLICKED(IDC_BUTTON6, &CUnitTool::OnPuaseButton)
+    ON_LBN_SELCHANGE(IDC_LIST6, &CUnitTool::OnLbnSelchangeList_SkillName)
 END_MESSAGE_MAP()
 
 
@@ -172,4 +174,9 @@ void CUnitTool::OnPuaseButton()
     {
         KillTimer(m_AnimationTimer);
     }
+}
+
+void CUnitTool::OnLbnSelchangeList_SkillName()
+{
+   
 }

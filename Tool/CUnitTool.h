@@ -50,4 +50,6 @@ public:
 
 	CScrollView* m_Scrollview;
 	afx_msg void OnPuaseButton();
+	CListBox ListBox_SkillName;
+	afx_msg void OnLbnSelchangeList_SkillName();
 };
