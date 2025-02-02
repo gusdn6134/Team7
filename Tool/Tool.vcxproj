@@ -196,6 +196,7 @@
     <ClInclude Include="CObj.h" />
     <ClInclude Include="CObjMgr.h" />
     <ClInclude Include="CSingleTexture.h" />
+    <ClInclude Include="CSkill.h" />
     <ClInclude Include="CTerrain.h" />
     <ClInclude Include="CTexture.h" />
     <ClInclude Include="CTextureMgr.h" />
@@ -219,6 +220,7 @@
     <ClCompile Include="CObj.cpp" />
     <ClCompile Include="CObjMgr.cpp" />
     <ClCompile Include="CSingleTexture.cpp" />
+    <ClCompile Include="CSkill.cpp" />
     <ClCompile Include="CTerrain.cpp" />
     <ClCompile Include="CTexture.cpp" />
     <ClCompile Include="CTextureMgr.cpp" />

@@ -73,6 +73,9 @@
     <Filter Include="04. Etc\04. Unit">
       <UniqueIdentifier>{0edb3e47-e899-4d59-b153-67794611cd34}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Etc\05. Skill">
+      <UniqueIdentifier>{211e2f55-90c0-47f4-83ee-8b2417efc556}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tool.h">
@@ -141,6 +144,9 @@
     <ClInclude Include="CUnit.h">
       <Filter>04. Etc\04. Unit</Filter>
     </ClInclude>
+    <ClInclude Include="CSkill.h">
+      <Filter>04. Etc\05. Skill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp">
@@ -196,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="CUnit.cpp">
       <Filter>04. Etc\04. Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="CSkill.cpp">
+      <Filter>04. Etc\05. Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
