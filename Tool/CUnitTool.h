@@ -31,6 +31,15 @@ public:
 	afx_msg void OnFrameSelChange();
 	afx_msg void OnPuaseButton();
 	afx_msg void OnLbnSelchangeList_SkillName();
+	afx_msg void OnSelchangeList_SkillFrame();
+	afx_msg void OnSkillPlayButton();
+	afx_msg void OnPuaseSkillButton();
+
+	afx_msg void Button_HideUnit();
+	afx_msg void Button_HideSkill();
+
+	afx_msg void OnAdd();
+	afx_msg void OnDestroy();
 
 public:
 	void Link_ImageKey();
@@ -62,7 +71,15 @@ public:
 
 	// Skill_Frame
 	CListBox ListBoxFrame_Skill;
-	afx_msg void OnSelchangeList_SkillFrame();
-	afx_msg void OnSkillPlayButton();
-	afx_msg void OnPuaseSkillButton();
+
+	bool m_bIsUnitShow;
+	bool m_bIsSkillShow;
+
+	map<CString, vector<IMG_INFO*>> ImgData;
+	CString Edit_Name;
+
+	CListBox m_ListBox_Animation;
+	CListBox ListBox_AnimationFrame;
+	afx_msg void OnLbnSelchange_AnimeFrame();
+	afx_msg void OnLbnSelchangeList_AnimeName();
 };

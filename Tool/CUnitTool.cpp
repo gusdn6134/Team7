@@ -19,6 +19,7 @@ IMPLEMENT_DYNAMIC(CUnitTool, CDialog)
 
 CUnitTool::CUnitTool(CWnd* pParent /*=nullptr*/)
 	: CDialog(IDD_CUnitTool, pParent)
+    , Edit_Name(_T(""))
 {
 
 }
@@ -34,6 +35,10 @@ void CUnitTool::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_LIST2, ListBox_Frame);
     DDX_Control(pDX, IDC_LIST6, ListBox_SkillName);
     DDX_Control(pDX, IDC_LIST5, ListBoxFrame_Skill);
+
+    DDX_Text(pDX, IDC_EDIT8, Edit_Name);
+    DDX_Control(pDX, IDC_LIST3, m_ListBox_Animation);
+    DDX_Control(pDX, IDC_LIST4, ListBox_AnimationFrame);
 }
 
 
@@ -48,6 +53,12 @@ BEGIN_MESSAGE_MAP(CUnitTool, CDialog)
     ON_LBN_SELCHANGE(IDC_LIST5, &CUnitTool::OnSelchangeList_SkillFrame)
     ON_BN_CLICKED(IDC_BUTTON9, &CUnitTool::OnSkillPlayButton)
     ON_BN_CLICKED(IDC_BUTTON8, &CUnitTool::OnPuaseSkillButton)
+    ON_BN_CLICKED(IDC_CHECK1, &CUnitTool::Button_HideUnit)
+    ON_BN_CLICKED(IDC_CHECK2, &CUnitTool::Button_HideSkill)
+    ON_BN_CLICKED(IDC_BUTTON2, &CUnitTool::OnAdd)
+    ON_WM_DESTROY()
+    ON_LBN_SELCHANGE(IDC_LIST4, &CUnitTool::OnLbnSelchange_AnimeFrame)
+    ON_LBN_SELCHANGE(IDC_LIST3, &CUnitTool::OnLbnSelchangeList_AnimeName)
 END_MESSAGE_MAP()
 
 
@@ -73,6 +84,18 @@ BOOL CUnitTool::OnInitDialog()
     {
         ListBoxFrame_Skill.SubclassDlgItem(IDC_LIST5, this);
     }
+
+    if (m_ListBox_Animation.m_hWnd == NULL)
+    {
+        m_ListBox_Animation.SubclassDlgItem(IDC_LIST3, this);
+    }
+
+    if (ListBox_AnimationFrame.m_hWnd == NULL)
+    {
+        ListBox_AnimationFrame.SubclassDlgItem(IDC_LIST4, this);
+    }
+
+
 
     GET_ScrollView
     m_Scrollview = pScrollView;
@@ -293,4 +316,136 @@ void CUnitTool::OnPuaseSkillButton()
     {
         KillTimer(m_SkillTimer);
     }
+}
+
+
+void CUnitTool::Button_HideUnit()
+{
+    UpdateData(TRUE);
+
+    if (m_bIsUnitShow)
+    {
+        CObjMgr::Get_Instance()->Render_ID(OBJ_Unit, true);
+        m_bIsUnitShow = false;
+    }
+    else
+    {
+        CObjMgr::Get_Instance()->Render_ID(OBJ_Unit, false);
+        m_bIsUnitShow = true;
+    }
+        
+
+    UpdateData(FALSE);
+}
+
+
+void CUnitTool::Button_HideSkill()
+{
+    UpdateData(TRUE);
+
+    if (m_bIsSkillShow)
+    {
+        CObjMgr::Get_Instance()->Render_ID(OBJ_Effect, true);
+        m_bIsSkillShow = false;
+    }
+    else
+    {
+        CObjMgr::Get_Instance()->Render_ID(OBJ_Effect, false);
+        m_bIsSkillShow = true;
+    }
+        
+
+    UpdateData(FALSE);
+}
+
+
+void CUnitTool::OnAdd()
+{
+    UpdateData(TRUE);
+    if (Edit_Name == L"") return;
+   
+    if (LB_ERR != ListBox_ImageKey.FindString(-1, Edit_Name))
+    {
+        auto	iter = m_mutimapTex_Unit.find(Edit_Name.GetString());
+        if (iter == m_mutimapTex_Unit.end()) return;
+
+        for (size_t i = 0; i < iter->second.size(); i++)
+        {
+            IMG_INFO* pImg = new IMG_INFO;
+
+            pImg->vPos = { 0.f,0.f,0.f };
+            pImg->vSize = { 0.f,0.f };
+
+            ImgData[Edit_Name].push_back(pImg);
+        }
+
+        m_ListBox_Animation.AddString(Edit_Name);
+
+        return;
+    }
+
+    if (LB_ERR != ListBox_SkillName.FindString(-1, Edit_Name))
+    {
+        auto	iter = m_mutimapTex_Skill.find(Edit_Name.GetString());
+        if (iter == m_mutimapTex_Skill.end()) return;
+
+        for (size_t i = 0; i < iter->second.size(); i++)
+        {
+            IMG_INFO* pImg = new IMG_INFO;
+
+            pImg->vPos = { 0.f,0.f,0.f };
+            pImg->vSize = { 0.f,0.f };
+
+            ImgData[Edit_Name].push_back(pImg);
+        }
+
+        m_ListBox_Animation.AddString(Edit_Name);
+
+        return;
+    }
+
+    UpdateData(FALSE);
+
+}
+
+
+void CUnitTool::OnDestroy()
+{
+   CDialog::OnDestroy();
+
+    for_each(ImgData.begin(), ImgData.end(), [](pair<const CString, std::vector<IMG_INFO*>>& pair)
+        {
+            for (auto& img : pair.second)
+                Safe_Delete(img);
+            pair.second.clear(); 
+        });
+
+    ImgData.clear(); 
+}
+
+
+void CUnitTool::OnLbnSelchangeList_AnimeName()
+{
+    UpdateData(TRUE);
+
+    auto	iter = ImgData.find(Edit_Name.GetString());
+    if (iter == ImgData.end()) return;
+
+    // 리스트 클리어 해야함
+    ListBox_AnimationFrame.ResetContent();
+
+    for (size_t i = 0; i < iter->second.size(); i++)
+    {
+        CString temp;
+        temp.Format(L"%d", i);
+        ListBox_AnimationFrame.AddString(temp);
+    }
+
+    UpdateData(FALSE);
+}
+
+
+void CUnitTool::OnLbnSelchange_AnimeFrame()
+{
+
 }
