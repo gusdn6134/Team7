@@ -104,4 +104,39 @@ HRESULT CUnit::Init_Unit_Texture()
 
     INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Shoot2/shoot2_%d.png",
         TEX_MULTI, L"Player", L"Shoot2", 5);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/ShootF/shootF_%d.png",
+        TEX_MULTI, L"Player", L"ShootF", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Sit/sit_%d.png",
+        TEX_MULTI, L"Player", L"Sit", 1);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/StabO1/stabO1_%d.png",
+        TEX_MULTI, L"Player", L"StabO1", 2);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/StabO2/stabO2_%d.png",
+        TEX_MULTI, L"Player", L"StabO2", 2);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/StabOF/stabOF_%d.png",
+        TEX_MULTI, L"Player", L"StabOF", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/StabT1/stabT1_%d.png",
+        TEX_MULTI, L"Player", L"StabT1", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/StabT2/stabT2_%d.png",
+        TEX_MULTI, L"Player", L"StabT2", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/StabTF/stabTF_%d.png",
+        TEX_MULTI, L"Player", L"StabTF", 4);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Stand1/stand1_%d.png",
+        TEX_MULTI, L"Player", L"Stand1", 5);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingO1/swingO1_%d.png",
+        TEX_MULTI, L"Player", L"SwingO1", 3);
+
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Walk/walk1_%d.png",
+        TEX_MULTI, L"Player", L"Walk", 4);
+
 }

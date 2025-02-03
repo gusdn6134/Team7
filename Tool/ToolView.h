@@ -50,11 +50,6 @@ public:
 private:
 	CDevice*	m_pDevice;
 
-
-public:
-	CBackGround* Get_pBackGround() { return m_pBackGround; }
-	CBackGround* m_pBackGround;
-
 public:
 	virtual void OnInitialUpdate();
 

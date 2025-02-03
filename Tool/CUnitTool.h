@@ -29,27 +29,40 @@ public:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnImgKeySelChange();
 	afx_msg void OnFrameSelChange();
+	afx_msg void OnPuaseButton();
+	afx_msg void OnLbnSelchangeList_SkillName();
 
 public:
 	void Link_ImageKey();
+	void Link_SKillKey();
 
 
 public:
+	CScrollView* m_Scrollview;
+
 	// ImageKey
 	CListBox ListBox_ImageKey;
-	map<wstring, vector<TEXINFO*>> m_mutimapTex;
-	CString	m_ImgFindName;
+	map<wstring, vector<TEXINFO*>> m_mutimapTex_Unit;
+	CString	m_ImgFindName_Unit;
 
-	//Frame
+	// Unit_Frame
 	CListBox ListBox_Frame;
 
-	//Timer
+	// Timer
 	UINT_PTR m_AnimationTimer;
 	int m_CurrentFrameIndex;
 
+	UINT_PTR m_SkillTimer;
+	int m_CurrentSkillIndex;
 
-	CScrollView* m_Scrollview;
-	afx_msg void OnPuaseButton();
+	// SKill
 	CListBox ListBox_SkillName;
-	afx_msg void OnLbnSelchangeList_SkillName();
+	map<wstring, vector<TEXINFO*>> m_mutimapTex_Skill;
+	CString	m_ImgFindName_Skill;
+
+	// Skill_Frame
+	CListBox ListBoxFrame_Skill;
+	afx_msg void OnSelchangeList_SkillFrame();
+	afx_msg void OnSkillPlayButton();
+	afx_msg void OnPuaseSkillButton();
 };

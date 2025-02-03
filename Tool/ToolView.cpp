@@ -19,6 +19,7 @@
 #include "CAbstractFactory.h"
 #include "CObjMgr.h"
 #include "CUnit.h"
+#include "CSkill.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -110,6 +111,8 @@ void CToolView::OnInitialUpdate()
 	// 유닛 생산
 	CObjMgr::Get_Instance()->AddObject(OBJ_Unit, CAbstractFactory<CUnit>::Create());
 
+	// 스킬 생산
+	CObjMgr::Get_Instance()->AddObject(OBJ_Effect, CAbstractFactory<CSkill>::Create());
 
 
 }
