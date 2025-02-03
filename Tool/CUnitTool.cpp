@@ -163,7 +163,7 @@ void CUnitTool::OnAnimePlayButton()
 
         m_CurrentFrameIndex = 0;  // 애니메이션 시작 시 첫 프레임부터
         ListBox_Frame.SetCurSel(m_CurrentFrameIndex);  // 첫 프레임 선택
-        m_AnimationTimer = SetTimer(1, 300, NULL); // 100ms 간격으로 타이머 실행
+        m_AnimationTimer = SetTimer(1, 200, NULL); // 100ms 간격으로 타이머 실행
     }
 
     UpdateData(FALSE);
@@ -179,7 +179,7 @@ void CUnitTool::OnTimer(UINT_PTR nIDEvent)
         ListBox_Frame.SetCurSel(m_CurrentFrameIndex);
         dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->Set_Path(m_ImgFindName_Unit.GetString(), m_CurrentFrameIndex);
 
-        m_Scrollview->Invalidate(TRUE);
+        m_Scrollview->Invalidate(FALSE);
     }
 
     if (nIDEvent == 2 && ListBoxFrame_Skill.GetCount() != 0)
@@ -189,7 +189,7 @@ void CUnitTool::OnTimer(UINT_PTR nIDEvent)
         ListBoxFrame_Skill.SetCurSel(m_CurrentSkillIndex);
         dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->Set_Path(m_ImgFindName_Skill.GetString(), m_CurrentSkillIndex);
 
-        m_Scrollview->Invalidate(TRUE);
+        m_Scrollview->Invalidate(FALSE);
     }
 
     CDialog::OnTimer(nIDEvent);
@@ -260,7 +260,7 @@ void CUnitTool::OnSelchangeList_SkillFrame()
 
     dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->Set_Path(m_ImgFindName_Skill.GetString(), iIndex);
 
-    m_Scrollview->Invalidate(TRUE);
+    m_Scrollview->Invalidate(FALSE);
 
     UpdateData(FALSE);
 }
@@ -280,7 +280,7 @@ void CUnitTool::OnSkillPlayButton()
 
         m_CurrentSkillIndex = 0;  // 애니메이션 시작 시 첫 프레임부터
         ListBoxFrame_Skill.SetCurSel(m_CurrentSkillIndex);  // 첫 프레임 선택
-        m_SkillTimer = SetTimer(2, 250, NULL); // 100ms 간격으로 타이머 실행
+        m_SkillTimer = SetTimer(2, 70, NULL); // 100ms 간격으로 타이머 실행
     }
 
     UpdateData(FALSE);
