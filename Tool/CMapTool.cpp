@@ -29,6 +29,13 @@ CMapTool::CMapTool(CWnd* pParent /*=nullptr*/)
 
 CMapTool::~CMapTool()
 {
+	for_each(m_vecTile.begin(), m_vecTile.end(), Safe_Delete<TILE*>);
+	m_vecTile.clear();
+
+	if (m_vecTile.empty())
+	{
+		int i = 0;
+	}
 }
 
 void CMapTool::DoDataExchange(CDataExchange* pDX)
@@ -81,14 +88,7 @@ BOOL CMapTool::OnInitDialog()
 	/*--------------------------
 	 백그라운드 이미지 추가
 	--------------------------*/
-	if (FAILED(CTextureMgr::Get_Instance()->Insert_Texture(
-		L"../MapleStory/BackGround/BackGround_%d.png",
-		TEX_MULTI, L"BackGround", L"BackGround_", 5)))
-	{
-		AfxMessageBox(L"Terrain Texture Insert Failed");
-		return 1;
-	}
-
+	
 	const auto& texMap = CTextureMgr::Get_Instance()->Get_mapTex();
 	auto it = texMap.find(L"BackGround");
 	if (it != texMap.end()) 
@@ -114,7 +114,7 @@ BOOL CMapTool::OnInitDialog()
 	--------------------------*/
 	if (FAILED(CTextureMgr::Get_Instance()->Insert_Texture(
 		L"../MapleStory/Tile/Tile_%d.png",
-		TEX_MULTI, L"Tile", L"Tile_", 3)))
+		TEX_MULTI, L"Tile", L"Tile_", 4)))
 	{
 		AfxMessageBox(L"Terrain Texture Insert Failed");
 		return 1;
@@ -133,6 +133,7 @@ BOOL CMapTool::OnInitDialog()
 			CString temp;
 			temp.Format(L"%s%d", L"Tile_", i);
 			m_listTile.AddString(temp);
+			
 		}
 	}
 	return TRUE;
@@ -141,6 +142,9 @@ BOOL CMapTool::OnInitDialog()
 void CMapTool::OnBG_ListBox()
 {
 	UpdateData(TRUE);
+
+	int iTileX(0);
+	int iTileY(0);
 
 	int	iIndex = m_listBackGround.GetCurSel();
 	{
@@ -151,6 +155,35 @@ void CMapTool::OnBG_ListBox()
 
 		m_MapSizeX = iter->second[iIndex]->tImgInfo.Width;
 		m_MapSizeY = iter->second[iIndex]->tImgInfo.Height;
+
+		iTileX = m_MapSizeX / TILECX;
+		iTileY = m_MapSizeY / TILECY;
+
+		CTerrain* pTerrain = dynamic_cast<CTerrain*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Tile)->front());
+
+
+		if (!m_vecTile.empty())
+		{
+			for_each(m_vecTile.begin(), m_vecTile.end(), Safe_Delete<TILE*>);
+			m_vecTile.clear();
+		}
+
+		for (int i = 0; i < iTileY; ++i)
+		{
+			for (int j = 0; j < iTileX; ++j)
+			{
+				TILE* pTile = new TILE;
+
+				float fY = iTileY * i;  // 세로 간격
+				float fX = iTileX * j;  // 가로 간격
+
+				pTile->vPos = { fX, fY, 0.f };
+				pTile->vSize = { (float)iTileX, (float)iTileY };
+				m_vecTile.push_back(pTile);
+			}
+		}
+
+		pTerrain->Set_vecTile(m_vecTile);
 	}
 	 
 	GET_ScrollView // 스크롤 뷰 가져오는 매크로
@@ -168,12 +201,9 @@ void CMapTool::OnBG_ListBox()
 
 void CMapTool::OnTile_ListBox()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-
 	UpdateData(TRUE);
 
-	CString strFindName;
-	//m_mapPngImage
+	CString path;
 
 	int iIndex = m_listTile.GetCurSel();
 	{
@@ -182,15 +212,35 @@ void CMapTool::OnTile_ListBox()
 		if (iter == m_mutiTileTex.end())
 			return;
 
+	
+		HBITMAP hOldBitmap = (HBITMAP)m_Picture.GetBitmap();
+		if (hOldBitmap)
+		{
+			m_Picture.SetBitmap(nullptr); // 기존 비트맵 해제
+			DeleteObject(hOldBitmap);
+		}
+
+		path.Format(L"../MapleStory/Tile/Tile_%d.png", iIndex);
+	
+		CImage image;
+		image.Load(path);
+
+		m_Picture.SetBitmap(image);
+		m_Picture.SetWindowPos(NULL, 0, 0, 100, 100, SWP_NOMOVE | SWP_NOZORDER);
+
+		m_Picture.Invalidate(TRUE);
+		m_Picture.UpdateWindow();
+
 		m_MapSizeX = iter->second[iIndex]->tImgInfo.Width;
 		m_MapSizeY = iter->second[iIndex]->tImgInfo.Height;
 	}
 
-	GET_ScrollView
-		if (pScrollView != nullptr)
-		{
-			pScrollView->SetScrollSizes(MM_TEXT, CSize(m_MapSizeX, m_MapSizeY));
-		}
+	//GET_ScrollView
+	//if (pScrollView != nullptr)
+	//{
+	//	pScrollView->SetScrollSizes(MM_TEXT, CSize(m_MapSizeX, m_MapSizeY));
+	//}
+	//pScrollView->Invalidate(TRUE);
 
 	UpdateData(FALSE);
 }

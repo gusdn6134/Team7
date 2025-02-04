@@ -114,7 +114,8 @@ void CToolView::OnInitialUpdate()
 	// 스킬 생산
 	CObjMgr::Get_Instance()->AddObject(OBJ_Effect, CAbstractFactory<CSkill>::Create());
 
-
+	// 타일 생산
+	CObjMgr::Get_Instance()->AddObject(OBJ_Tile, CAbstractFactory<CTerrain>::Create());
 }
 
 void CToolView::OnDraw(CDC* /*pDC*/)

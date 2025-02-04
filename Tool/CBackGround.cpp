@@ -19,6 +19,13 @@ HRESULT CBackGround::Initialize()
     GET_TOOLVIEW
     m_pMainView = pView;
 
+    if (FAILED(CTextureMgr::Get_Instance()->Insert_Texture(
+        L"../MapleStory/BackGround/BackGround_%d.png",
+        TEX_MULTI, L"BackGround", L"BackGround_", 5)))
+    {
+        AfxMessageBox(L"Terrain Texture Insert Failed");
+        return 1;
+    }
     return E_NOTIMPL;
 }
 
@@ -37,6 +44,7 @@ void CBackGround::Render()
         m_tinfo.vPos.x - m_pMainView->GetScrollPos(0),
         m_tinfo.vPos.y - m_pMainView->GetScrollPos(1),
         m_tinfo.vPos.z);
+
 
     m_tinfo.matWorld = matScale * matTrans;
 

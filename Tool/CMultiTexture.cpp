@@ -80,6 +80,7 @@ HRESULT CMultiTexture::Insert_Texture(const TCHAR* pFilePath, const TCHAR* pStat
 
 void CMultiTexture::Release()
 {
+    
     for_each(m_MapMultiTex.begin(), m_MapMultiTex.end(), [](auto& MyPair)
         {
             for_each(MyPair.second.begin(), MyPair.second.end(), 

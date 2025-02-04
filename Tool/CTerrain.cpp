@@ -2,10 +2,13 @@
 #include "CTerrain.h"
 #include "CTextureMgr.h"
 #include "CDevice.h"
+#include "MainFrm.h"
+#include "CMapTool.h"
 
-CTerrain::CTerrain()
+
+CTerrain::CTerrain() : m_pMainView(nullptr)
 {
-	m_vecTile.reserve(TILEX * TILEY);
+	//m_vecTile.reserve(TILEX * TILEY);
 }
 
 CTerrain::~CTerrain()
@@ -15,13 +18,16 @@ CTerrain::~CTerrain()
 
 HRESULT CTerrain::Initialize()
 {
-	if (FAILED(CTextureMgr::Get_Instance()->Insert_Texture(
-		L"../Texture/Stage/Terrain/Tile/Tile%d.png",
-		TEX_MULTI, L"Terrain", L"Tile", 36)))
-	{
-		AfxMessageBox(L"Terrain Texture Insert Failed");
-		return E_FAIL;
-	}
+	//if (FAILED(CTextureMgr::Get_Instance()->Insert_Texture(
+	//	L"../Texture/Stage/Terrain/Tile/Tile%d.png",
+	//	TEX_MULTI, L"Terrain", L"Tile", 36)))
+	//{
+	//	AfxMessageBox(L"Terrain Texture Insert Failed");
+	//	return E_FAIL;
+	//}
+
+	GET_TOOLVIEW
+		m_pMainView = pView;
 
 	return S_OK;
 }
@@ -33,17 +39,62 @@ void CTerrain::Update()
 
 void CTerrain::Render()
 {
-	D3DXMATRIX	matWorld, matScale, matTrans;
+	D3DXMATRIX matWorld, matScale, matTrans;
 
-	TCHAR	szBuf[MIN_STR] = L"";
-	int		iIndex(0);
+	TCHAR szBuf[MIN_STR] = L"";
+	int iIndex(0);
 
+
+	for (auto pTile : m_vecTile)
+	{
+		D3DXMatrixIdentity(&matWorld);
+		D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);
+		D3DXMatrixTranslation(&matTrans,
+			pTile->vPos.x - m_pMainView->GetScrollPos(0),
+			pTile->vPos.y - m_pMainView->GetScrollPos(1),
+			pTile->vPos.z);
+
+		matWorld = matScale * matTrans;
+
+		RECT	rc{};
+
+		GetClientRect(m_pMainView->m_hWnd, &rc);
+
+
+		float	fX = WINCX / float(rc.right - rc.left);
+		float	fY = WINCY / float(rc.bottom - rc.top);
+		Set_Ratio(&matWorld, fX, fY);
+		
+		CDevice::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
+		const TEXINFO* pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Tile", L"Tile_", 1);
+
+
+		CDevice::Get_Instance()->Get_Sprite()->Draw(
+			pTexInfo->pTexture,  
+			nullptr,  
+			nullptr,  
+			nullptr,  
+			D3DCOLOR_ARGB(255, 255, 255, 255));
 	
+		swprintf_s(szBuf, L"%d", iIndex);
+
+		CDevice::Get_Instance()->Get_Font()->DrawTextW(CDevice::Get_Instance()->Get_Sprite(),
+			szBuf,
+			lstrlen(szBuf),
+			nullptr,
+			0,
+			D3DCOLOR_ARGB(255, 255, 255, 255));
+
+		iIndex++;
+
+	}
 }
 
 void CTerrain::Release()
 {
-
+	/*for_each(m_vecTile.begin(), m_vecTile.end(), Safe_Delete<TILE*>);
+	m_vecTile.clear();
+	m_vecTile.shrink_to_fit();*/
 }
 
 

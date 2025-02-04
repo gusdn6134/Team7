@@ -37,6 +37,8 @@ public: //BackGround
 
 	map<wstring, vector<TEXINFO*>> m_mutimapTex;
 	map<wstring, vector<TEXINFO*>> m_mutiTileTex;
+	
+	
 	map<CString, CImage*>		m_mapPngImage;
 
 	CBackGround* m_pBackGround;
@@ -47,6 +49,7 @@ public: //TilePath
 	afx_msg void OnBG_ListBox();
 	afx_msg void OnTile_ListBox();
 
-
+	vector<TILE*>		m_vecTile;
 	CStatic m_Picture;
+
 };
