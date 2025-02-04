@@ -20,6 +20,10 @@ IMPLEMENT_DYNAMIC(CUnitTool, CDialog)
 CUnitTool::CUnitTool(CWnd* pParent /*=nullptr*/)
 	: CDialog(IDD_CUnitTool, pParent)
     , Edit_Name(_T(""))
+    , UnitFrameTime(0)
+    , SkillFrameTime(0)
+    , m_iAnimationFrame_Index(0)
+
 {
 
 }
@@ -39,6 +43,16 @@ void CUnitTool::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_EDIT8, Edit_Name);
     DDX_Control(pDX, IDC_LIST3, m_ListBox_Animation);
     DDX_Control(pDX, IDC_LIST4, ListBox_AnimationFrame);
+    DDX_Text(pDX, IDC_EDIT1, UnitFrameTime);
+    DDX_Text(pDX, IDC_EDIT2, SkillFrameTime);
+
+    DDX_Control(pDX, IDC_SLIDER4, m_Slider_PosX);
+    DDX_Control(pDX, IDC_SLIDER5, m_Slider_PosY);
+    DDX_Control(pDX, IDC_SLIDER6, m_Slider_PosZ);
+    DDX_Control(pDX, IDC_EDIT5, m_PosX);
+    DDX_Control(pDX, IDC_EDIT6, m_PosY);
+    DDX_Control(pDX, IDC_EDIT7, m_PosZ);
+    DDX_Control(pDX, IDC_EDIT3, AnimeFrameTime);
 }
 
 
@@ -59,6 +73,13 @@ BEGIN_MESSAGE_MAP(CUnitTool, CDialog)
     ON_WM_DESTROY()
     ON_LBN_SELCHANGE(IDC_LIST4, &CUnitTool::OnLbnSelchange_AnimeFrame)
     ON_LBN_SELCHANGE(IDC_LIST3, &CUnitTool::OnLbnSelchangeList_AnimeName)
+    ON_BN_CLICKED(IDC_BUTTON1, &CUnitTool::OnBnClickedButton_AnimePlay)
+    ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER4, &CUnitTool::OnNMReleasedcaptureSlider_X)
+    ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER5, &CUnitTool::OnNMReleasedcaptureSlider_Y)
+    ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER6, &CUnitTool::OnNMReleasedcaptureSlider_Z)
+    ON_BN_CLICKED(IDC_BUTTON11, &CUnitTool::OnBnClickedButton_0_indexSort)
+    ON_BN_CLICKED(IDC_BUTTON10, &CUnitTool::OnAddUnit)
+    ON_BN_CLICKED(IDC_BUTTON12, &CUnitTool::OnAddSkill)
 END_MESSAGE_MAP()
 
 
@@ -95,6 +116,54 @@ BOOL CUnitTool::OnInitDialog()
         ListBox_AnimationFrame.SubclassDlgItem(IDC_LIST4, this);
     }
 
+    if (m_Slider_PosX.m_hWnd == NULL)
+    {
+        m_Slider_PosX.SubclassDlgItem(IDC_SLIDER4, this);
+    }
+
+    if (m_Slider_PosY.m_hWnd == NULL)
+    {
+        m_Slider_PosY.SubclassDlgItem(IDC_SLIDER5, this);
+    }
+
+    if (m_Slider_PosZ.m_hWnd == NULL)
+    {
+        m_Slider_PosZ.SubclassDlgItem(IDC_SLIDER6, this);
+    }
+
+    if (m_PosX.m_hWnd == NULL)
+    {
+        m_PosX.SubclassDlgItem(IDC_EDIT5, this);
+    }
+
+    if (m_PosY.m_hWnd == NULL)
+    {
+        m_PosY.SubclassDlgItem(IDC_EDIT6, this);
+    }
+
+    if (m_PosZ.m_hWnd == NULL)
+    {
+        m_PosZ.SubclassDlgItem(IDC_EDIT7, this);
+    }
+
+  
+    // 슬라이더 범위 설정
+    m_Slider_PosX.SetRange(0, 800);
+    m_Slider_PosX.SetPos(400);
+    m_Slider_PosX.SetTicFreq(50);
+
+    m_Slider_PosY.SetRange(0, 600);
+    m_Slider_PosY.SetPos(300);
+    m_Slider_PosY.SetTicFreq(50);
+
+    m_Slider_PosZ.SetRange(0, 100);
+    m_Slider_PosZ.SetPos(0);
+    m_Slider_PosZ.SetTicFreq(50);
+
+    // 에딧 컨트롤을 0으로 초기화
+    m_PosX.SetWindowText(_T("400"));
+    m_PosY.SetWindowText(_T("300"));
+    m_PosZ.SetWindowText(_T("0"));
 
 
     GET_ScrollView
@@ -141,6 +210,9 @@ void CUnitTool::OnImgKeySelChange()
     auto	iter = m_mutimapTex_Unit.find(m_ImgFindName_Unit.GetString());
     if (iter == m_mutimapTex_Unit.end()) return;
 
+    dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->SetPos(D3DXVECTOR3(400.f,300.f,0.f));
+
+
     // 리스트 클리어 해야함
     ListBox_Frame.ResetContent();
 
@@ -151,7 +223,7 @@ void CUnitTool::OnImgKeySelChange()
         ListBox_Frame.AddString(temp);
 	}
 
-
+    m_Scrollview->Invalidate(TRUE);
     UpdateData(FALSE);
 }
 
@@ -186,7 +258,7 @@ void CUnitTool::OnAnimePlayButton()
 
         m_CurrentFrameIndex = 0;  // 애니메이션 시작 시 첫 프레임부터
         ListBox_Frame.SetCurSel(m_CurrentFrameIndex);  // 첫 프레임 선택
-        m_AnimationTimer = SetTimer(1, 200, NULL); // 100ms 간격으로 타이머 실행
+        m_AnimationTimer = SetTimer(1, UnitFrameTime, NULL); // 100ms 간격으로 타이머 실행
     }
 
     UpdateData(FALSE);
@@ -303,7 +375,7 @@ void CUnitTool::OnSkillPlayButton()
 
         m_CurrentSkillIndex = 0;  // 애니메이션 시작 시 첫 프레임부터
         ListBoxFrame_Skill.SetCurSel(m_CurrentSkillIndex);  // 첫 프레임 선택
-        m_SkillTimer = SetTimer(2, 70, NULL); // 100ms 간격으로 타이머 실행
+        m_SkillTimer = SetTimer(2, SkillFrameTime, NULL); // 100ms 간격으로 타이머 실행
     }
 
     UpdateData(FALSE);
@@ -334,7 +406,7 @@ void CUnitTool::Button_HideUnit()
         m_bIsUnitShow = true;
     }
         
-
+    m_Scrollview->Invalidate(FALSE);
     UpdateData(FALSE);
 }
 
@@ -354,7 +426,7 @@ void CUnitTool::Button_HideSkill()
         m_bIsSkillShow = true;
     }
         
-
+    m_Scrollview->Invalidate(FALSE);
     UpdateData(FALSE);
 }
 
@@ -362,47 +434,7 @@ void CUnitTool::Button_HideSkill()
 void CUnitTool::OnAdd()
 {
     UpdateData(TRUE);
-    if (Edit_Name == L"") return;
    
-    if (LB_ERR != ListBox_ImageKey.FindString(-1, Edit_Name))
-    {
-        auto	iter = m_mutimapTex_Unit.find(Edit_Name.GetString());
-        if (iter == m_mutimapTex_Unit.end()) return;
-
-        for (size_t i = 0; i < iter->second.size(); i++)
-        {
-            IMG_INFO* pImg = new IMG_INFO;
-
-            pImg->vPos = { 0.f,0.f,0.f };
-            pImg->vSize = { 0.f,0.f };
-
-            ImgData[Edit_Name].push_back(pImg);
-        }
-
-        m_ListBox_Animation.AddString(Edit_Name);
-
-        return;
-    }
-
-    if (LB_ERR != ListBox_SkillName.FindString(-1, Edit_Name))
-    {
-        auto	iter = m_mutimapTex_Skill.find(Edit_Name.GetString());
-        if (iter == m_mutimapTex_Skill.end()) return;
-
-        for (size_t i = 0; i < iter->second.size(); i++)
-        {
-            IMG_INFO* pImg = new IMG_INFO;
-
-            pImg->vPos = { 0.f,0.f,0.f };
-            pImg->vSize = { 0.f,0.f };
-
-            ImgData[Edit_Name].push_back(pImg);
-        }
-
-        m_ListBox_Animation.AddString(Edit_Name);
-
-        return;
-    }
 
     UpdateData(FALSE);
 
@@ -428,10 +460,12 @@ void CUnitTool::OnLbnSelchangeList_AnimeName()
 {
     UpdateData(TRUE);
 
+    int	iIndex = m_ListBox_Animation.GetCurSel();
+    m_ListBox_Animation.GetText(iIndex, Edit_Name);
+
     auto	iter = ImgData.find(Edit_Name.GetString());
     if (iter == ImgData.end()) return;
 
-    // 리스트 클리어 해야함
     ListBox_AnimationFrame.ResetContent();
 
     for (size_t i = 0; i < iter->second.size(); i++)
@@ -441,11 +475,238 @@ void CUnitTool::OnLbnSelchangeList_AnimeName()
         ListBox_AnimationFrame.AddString(temp);
     }
 
+    CString temp;
+    temp.Format(_T("%d"), ImgData[Edit_Name][0]->iFrameTime);
+    AnimeFrameTime.SetWindowText(temp);
+
     UpdateData(FALSE);
 }
 
-
 void CUnitTool::OnLbnSelchange_AnimeFrame()
 {
+    UpdateData(TRUE);
+
+    const auto& texMap = CTextureMgr::Get_Instance()->Get_mapTex();
+    m_iAnimationFrame_Index = ListBox_AnimationFrame.GetCurSel();
+
+    if (LB_ERR != ListBox_ImageKey.FindString(-1, Edit_Name))
+    {
+        dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->Set_Path(Edit_Name.GetString(), m_iAnimationFrame_Index);
+        dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->SetPos(ImgData[Edit_Name][m_iAnimationFrame_Index]->vPos);
+    }
+    if (LB_ERR != ListBox_SkillName.FindString(-1, Edit_Name))
+    {       
+        dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->Set_Path(Edit_Name.GetString(), m_iAnimationFrame_Index);
+        dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->SetPos(ImgData[Edit_Name][m_iAnimationFrame_Index]->vPos);
+    }
+    m_Scrollview->Invalidate(FALSE);
+
+    int nPosX = ImgData[Edit_Name][m_iAnimationFrame_Index]->vPos.x;
+    int nPosY = ImgData[Edit_Name][m_iAnimationFrame_Index]->vPos.y;
+    int nPosZ = ImgData[Edit_Name][m_iAnimationFrame_Index]->vPos.z;
+
+    m_Slider_PosX.SetPos(nPosX);
+    m_Slider_PosY.SetPos(nPosY);
+    m_Slider_PosZ.SetPos(nPosZ);
+
+    CString str;
+    str.Format(_T("%d"), nPosX);
+    m_PosX.SetWindowText(str);
+
+    str.Format(_T("%d"), nPosY);
+    m_PosY.SetWindowText(str);
+
+    str.Format(_T("%d"), nPosZ);
+    m_PosZ.SetWindowText(str);
+
+
+    UpdateData(FALSE);
+}
+
+void CUnitTool::OnBnClickedButton_AnimePlay()
+{
+    UpdateData(TRUE);
+
+ 
+    UpdateData(FALSE);
+}
+
+void CUnitTool::OnNMReleasedcaptureSlider_X(NMHDR* pNMHDR, LRESULT* pResult)
+{
+    UpdateData(TRUE);
+
+    if (Edit_Name == L"" || ImgData.empty())
+    {
+        m_Slider_PosX.SetPos(400);
+        return;
+    }
+
+
+    int  nPos = m_Slider_PosX.GetPos();
+    ImgData[Edit_Name][m_iAnimationFrame_Index]->vPos.x = nPos;
+
+
+    if (LB_ERR != ListBox_ImageKey.FindString(-1, Edit_Name))
+    {
+        dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->Set_Path(Edit_Name.GetString(), m_iAnimationFrame_Index);
+        dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->SetPos(ImgData[Edit_Name][m_iAnimationFrame_Index]->vPos);
+    }
+    if (LB_ERR != ListBox_SkillName.FindString(-1, Edit_Name))
+    {
+        dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->Set_Path(Edit_Name.GetString(), m_iAnimationFrame_Index);
+        dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->SetPos(ImgData[Edit_Name][m_iAnimationFrame_Index]->vPos);
+    }
+
+
+    CString str;
+    str.Format(_T("%d"), nPos);
+    m_PosX.SetWindowText(str);
+
+    m_Scrollview->Invalidate(FALSE);
+
+    *pResult = 0;
+
+    UpdateData(FALSE);
+}
+
+void CUnitTool::OnNMReleasedcaptureSlider_Y(NMHDR* pNMHDR, LRESULT* pResult)
+{
+    UpdateData(TRUE);
+
+    if (Edit_Name == L"" || ImgData.empty())
+    {
+        m_Slider_PosY.SetPos(300);
+        return;
+    }
+
+    int nPos = m_Slider_PosY.GetPos();
+    ImgData[Edit_Name][m_iAnimationFrame_Index]->vPos.y = nPos;
+
+    if (LB_ERR != ListBox_ImageKey.FindString(-1, Edit_Name))
+    {
+        dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->Set_Path(Edit_Name.GetString(), m_iAnimationFrame_Index);
+        dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->SetPos(ImgData[Edit_Name][m_iAnimationFrame_Index]->vPos);
+    }
+    if (LB_ERR != ListBox_SkillName.FindString(-1, Edit_Name))
+    {
+        dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->Set_Path(Edit_Name.GetString(), m_iAnimationFrame_Index);
+        dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->SetPos(ImgData[Edit_Name][m_iAnimationFrame_Index]->vPos);
+    }
+
+    CString str;
+    str.Format(_T("%d"), nPos);
+    m_PosY.SetWindowText(str);
+
+    m_Scrollview->Invalidate(FALSE);
+
+    *pResult = 0;
+
+    UpdateData(FALSE);
+}
+
+void CUnitTool::OnNMReleasedcaptureSlider_Z(NMHDR* pNMHDR, LRESULT* pResult)
+{
+    UpdateData(TRUE);
+
+    if (Edit_Name == L"" || ImgData.empty())
+    {
+        m_Slider_PosZ.SetPos(0);
+        return;
+    }
+
+    if (LB_ERR != ListBox_ImageKey.FindString(-1, Edit_Name))
+    {
+        dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->Set_Path(Edit_Name.GetString(), m_iAnimationFrame_Index);
+        dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->SetPos(ImgData[Edit_Name][m_iAnimationFrame_Index]->vPos);
+    }
+    if (LB_ERR != ListBox_SkillName.FindString(-1, Edit_Name))
+    {
+        dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->Set_Path(Edit_Name.GetString(), m_iAnimationFrame_Index);
+        dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->SetPos(ImgData[Edit_Name][m_iAnimationFrame_Index]->vPos);
+    }
+
+    int nPos = m_Slider_PosZ.GetPos();
+    ImgData[Edit_Name][m_iAnimationFrame_Index]->vPos.z = nPos;
+
+    CString str;
+    str.Format(_T("%d"), nPos);
+    m_PosZ.SetWindowText(str);
+
+    m_Scrollview->Invalidate(FALSE);
+
+    *pResult = 0;
+
+    UpdateData(FALSE);
+}
+
+void CUnitTool::OnBnClickedButton_0_indexSort()
+{
+    if (Edit_Name == L"" || ImgData.empty())
+    {
+        return;
+    }
+
+    D3DXVECTOR3 temp = ImgData[Edit_Name][0]->vPos;
+    for (auto& vec : ImgData[Edit_Name])
+    {
+        vec->vPos = temp;
+    }
+    m_Scrollview->Invalidate(TRUE);
+}
+
+void CUnitTool::OnAddUnit()
+{
+    UpdateData(TRUE);
+
+    int num = ListBox_ImageKey.GetCurSel();
+
+    if (num < 0) return;
+    ListBox_ImageKey.GetText(num, Edit_Name);
+
+    auto	iter = m_mutimapTex_Unit.find(Edit_Name.GetString());
+    if (iter == m_mutimapTex_Unit.end()) return;
+
+    for (size_t i = 0; i < iter->second.size(); i++)
+    {
+        IMG_INFO* pImg = new IMG_INFO;
+
+        pImg->vPos = { 400.f,300.f,0.f };
+        pImg->vSize = { 0.f,0.f };
+        pImg->iFrameTime = UnitFrameTime;
+
+        ImgData[Edit_Name].push_back(pImg);
+    }
+
+    m_ListBox_Animation.AddString(Edit_Name);
+
+    UpdateData(FALSE);
+}
+
+void CUnitTool::OnAddSkill()
+{
+    UpdateData(TRUE);
+
+    int num = ListBox_SkillName.GetCurSel();
+
+    if (num < 0) return;
+    ListBox_SkillName.GetText(num, Edit_Name);
+
+    auto	iter = m_mutimapTex_Skill.find(Edit_Name.GetString());
+    if (iter == m_mutimapTex_Skill.end()) return;
+
+    for (size_t i = 0; i < iter->second.size(); i++)
+    {
+        IMG_INFO* pImg = new IMG_INFO;
+
+        pImg->vPos = { 400.f, 300.f, 0.f };
+        pImg->vSize = { 0.f,0.f };
+        pImg->iFrameTime = SkillFrameTime;
+
+        ImgData[Edit_Name].push_back(pImg);
+    }
+
+    m_ListBox_Animation.AddString(Edit_Name);
+
+    UpdateData(FALSE);
 
 }

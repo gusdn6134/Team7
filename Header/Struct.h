@@ -62,5 +62,6 @@ typedef struct tagImginfo
 {
 	D3DXVECTOR3		vPos;
 	D3DXVECTOR2		vSize;
+	int				iFrameTime;
 
 }IMG_INFO;

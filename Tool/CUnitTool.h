@@ -41,6 +41,18 @@ public:
 	afx_msg void OnAdd();
 	afx_msg void OnDestroy();
 
+	afx_msg void OnLbnSelchange_AnimeFrame();
+	afx_msg void OnLbnSelchangeList_AnimeName();
+	afx_msg void OnBnClickedButton_AnimePlay();
+
+	afx_msg void OnNMReleasedcaptureSlider_X(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnNMReleasedcaptureSlider_Y(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnNMReleasedcaptureSlider_Z(NMHDR* pNMHDR, LRESULT* pResult);
+
+	afx_msg void OnBnClickedButton_0_indexSort();
+	afx_msg void OnAddUnit();
+	afx_msg void OnAddSkill();
+
 public:
 	void Link_ImageKey();
 	void Link_SKillKey();
@@ -76,10 +88,25 @@ public:
 	bool m_bIsSkillShow;
 
 	map<CString, vector<IMG_INFO*>> ImgData;
+
+
 	CString Edit_Name;
 
 	CListBox m_ListBox_Animation;
 	CListBox ListBox_AnimationFrame;
-	afx_msg void OnLbnSelchange_AnimeFrame();
-	afx_msg void OnLbnSelchangeList_AnimeName();
+
+	int UnitFrameTime;
+	int SkillFrameTime;
+
+	CSliderCtrl m_Slider_PosX;
+	CSliderCtrl m_Slider_PosY;
+	CSliderCtrl m_Slider_PosZ;
+
+	int  m_iAnimationFrame_Index;
+
+	CEdit m_PosX;
+	CEdit m_PosY;
+	CEdit m_PosZ;
+	
+	CEdit AnimeFrameTime;
 };
