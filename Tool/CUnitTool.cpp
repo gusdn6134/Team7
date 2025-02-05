@@ -80,6 +80,7 @@ BEGIN_MESSAGE_MAP(CUnitTool, CDialog)
     ON_BN_CLICKED(IDC_BUTTON11, &CUnitTool::OnBnClickedButton_0_indexSort)
     ON_BN_CLICKED(IDC_BUTTON10, &CUnitTool::OnAddUnit)
     ON_BN_CLICKED(IDC_BUTTON12, &CUnitTool::OnAddSkill)
+    ON_BN_CLICKED(IDC_BUTTON5, &CUnitTool::AnimePause)
 END_MESSAGE_MAP()
 
 
@@ -287,6 +288,24 @@ void CUnitTool::OnTimer(UINT_PTR nIDEvent)
         m_Scrollview->Invalidate(FALSE);
     }
 
+    if (nIDEvent == 3 && ImgData[name1].size() != 0)
+    {
+        frame1 = (frame1 + 1) % ImgData[name1].size();
+        ListBox_AnimationFrame.SetCurSel(frame1);
+        dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->Set_Path(name1.GetString(), frame1);
+
+        m_Scrollview->Invalidate(FALSE);
+    }
+
+    if (nIDEvent == 4 && ImgData[name2].size() != 0)
+    {
+        frame2 = (frame2 + 1) % ImgData[name2].size();
+        ListBox_AnimationFrame.SetCurSel(frame2);
+        dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->Set_Path(name2.GetString(), frame2);
+
+        m_Scrollview->Invalidate(FALSE);
+    }
+
     CDialog::OnTimer(nIDEvent);
 }
 
@@ -435,6 +454,8 @@ void CUnitTool::OnAdd()
 {
     UpdateData(TRUE);
    
+    
+
 
     UpdateData(FALSE);
 
@@ -460,6 +481,34 @@ void CUnitTool::OnLbnSelchangeList_AnimeName()
 {
     UpdateData(TRUE);
 
+    int maxSelections = 2; // 최대 선택 개수
+    int count = m_ListBox_Animation.GetSelCount();
+    CArray<int, int> selectedIndexes;
+
+    if (count > maxSelections)
+    {
+        // 초과한 경우 마지막 선택을 취소
+        selectedIndexes.SetSize(count);
+        m_ListBox_Animation.GetSelItems(count, selectedIndexes.GetData());
+
+        // 가장 마지막에 선택한 항목을 선택 취소
+        m_ListBox_Animation.SetSel(selectedIndexes[count - 1], FALSE);
+    }
+    if (count == 2) // 두 개만 선택되었는지 확인
+    {
+        selectedIndexes.SetSize(count);
+        m_ListBox_Animation.GetSelItems(count, selectedIndexes.GetData());
+
+        int firstIndex = selectedIndexes[0]; // 첫 번째 선택된 인덱스
+        int secondIndex = selectedIndexes[1]; // 두 번째 선택된 인덱스
+
+        m_ListBox_Animation.GetText(firstIndex, name1);
+        m_ListBox_Animation.GetText(secondIndex, name2);
+
+        auto	iter = ImgData.find(Edit_Name.GetString());
+        if (iter == ImgData.end()) return;
+    }
+
     int	iIndex = m_ListBox_Animation.GetCurSel();
     m_ListBox_Animation.GetText(iIndex, Edit_Name);
 
@@ -478,6 +527,11 @@ void CUnitTool::OnLbnSelchangeList_AnimeName()
     CString temp;
     temp.Format(_T("%d"), ImgData[Edit_Name][0]->iFrameTime);
     AnimeFrameTime.SetWindowText(temp);
+
+    if (count == 1)
+    {
+        name1 = Edit_Name;
+    }
 
     UpdateData(FALSE);
 }
@@ -526,9 +580,95 @@ void CUnitTool::OnLbnSelchange_AnimeFrame()
 void CUnitTool::OnBnClickedButton_AnimePlay()
 {
     UpdateData(TRUE);
+    if (name1 == L"") return;
 
- 
+    if (0 < ListBox_ImageKey.FindString(-1, name1))
+    {
+        if (ImgData[name1].size() != 0)
+        {
+
+            if (m_AnimationTimer != 0)
+            {
+                KillTimer(m_AnimationTimer);
+            }
+            if (m_Timer1 != 0)
+            {
+                KillTimer(m_Timer1);
+            }
+
+            frame1 = 0;  // 애니메이션 시작 시 첫 프레임부터
+            m_Timer1 = SetTimer(3, ImgData[name1][0]->iFrameTime, NULL); // 100ms 간격으로 타이머 실행
+        }
+        if (name2 == L"") return;
+        if (0 < ListBox_ImageKey.FindString(-1, name2)) return;
+        if (0 < ListBox_SkillName.FindString(-1, name2))
+        {
+            if (m_SkillTimer != 0)
+            {
+                KillTimer(m_SkillTimer);
+            }
+            if (m_Timer2 != 0)
+            {
+                KillTimer(m_Timer2);
+            }
+
+            frame2 = 0;  // 애니메이션 시작 시 첫 프레임부터
+            m_Timer2 = SetTimer(4, ImgData[name2][0]->iFrameTime, NULL); // 100ms 간격으로 타이머 실행
+        }
+
+        return;
+    }
+    else if(0 < ListBox_SkillName.FindString(-1, name1))
+    {
+        if (ImgData[name1].size() != 0)
+        {
+
+            if (m_SkillTimer != 0)
+            {
+                KillTimer(m_SkillTimer);
+            }
+            if (m_Timer2 != 0)
+            {
+                KillTimer(m_Timer2);
+            }
+
+            frame2 = 0;  // 애니메이션 시작 시 첫 프레임부터
+            m_Timer2 = SetTimer(4, ImgData[name2][0]->iFrameTime, NULL); // 100ms 간격으로 타이머 실행
+        }
+        if (name2 == L"") return;
+        if (0 < ListBox_SkillName.FindString(-1, name2)) return;
+        if (0 < ListBox_ImageKey.FindString(-1, name2))
+        {
+            if (m_AnimationTimer != 0)
+            {
+                KillTimer(m_AnimationTimer);
+            }
+            if (m_Timer1 != 0)
+            {
+                KillTimer(m_Timer2);
+            }
+
+            frame1 = 0;  // 애니메이션 시작 시 첫 프레임부터
+            m_Timer1 = SetTimer(3, ImgData[name1][0]->iFrameTime, NULL); // 100ms 간격으로 타이머 실행
+        }
+
+        return;
+
+    }
+
     UpdateData(FALSE);
+}
+
+void CUnitTool::AnimePause()
+{
+    if (m_Timer1 != 0)
+    {
+        KillTimer(m_Timer1);
+    }
+    if (m_Timer2 != 0)
+    {
+        KillTimer(m_Timer2);
+    }
 }
 
 void CUnitTool::OnNMReleasedcaptureSlider_X(NMHDR* pNMHDR, LRESULT* pResult)
@@ -666,6 +806,8 @@ void CUnitTool::OnAddUnit()
     auto	iter = m_mutimapTex_Unit.find(Edit_Name.GetString());
     if (iter == m_mutimapTex_Unit.end()) return;
 
+    if (-1 != m_ListBox_Animation.FindString(-1, Edit_Name)) return;
+
     for (size_t i = 0; i < iter->second.size(); i++)
     {
         IMG_INFO* pImg = new IMG_INFO;
@@ -693,6 +835,8 @@ void CUnitTool::OnAddSkill()
 
     auto	iter = m_mutimapTex_Skill.find(Edit_Name.GetString());
     if (iter == m_mutimapTex_Skill.end()) return;
+
+    if (-1 != m_ListBox_Animation.FindString(-1, Edit_Name)) return;
 
     for (size_t i = 0; i < iter->second.size(); i++)
     {

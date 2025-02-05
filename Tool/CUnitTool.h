@@ -109,4 +109,12 @@ public:
 	CEdit m_PosZ;
 	
 	CEdit AnimeFrameTime;
+
+	CString name1, name2;
+	int frame1, frame2;
+
+
+	UINT_PTR m_Timer1;
+	UINT_PTR m_Timer2;
+	afx_msg void AnimePause();
 };
