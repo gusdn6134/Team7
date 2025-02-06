@@ -83,6 +83,7 @@ BEGIN_MESSAGE_MAP(CUnitTool, CDialog)
     ON_BN_CLICKED(IDC_BUTTON5, &CUnitTool::AnimePause)
     ON_BN_CLICKED(IDC_BUTTON4, &CUnitTool::OnSave)
     ON_BN_CLICKED(IDC_BUTTON3, &CUnitTool::OnLoad)
+    ON_EN_CHANGE(IDC_EDIT3, &CUnitTool::OnFreamChange)
 END_MESSAGE_MAP()
 
 
@@ -293,15 +294,17 @@ void CUnitTool::OnTimer(UINT_PTR nIDEvent)
     if (nIDEvent == 3 && ImgData[name1].size() != 0)
     {
         frame1 = (frame1 + 1) % ImgData[name1].size();
-        ListBox_AnimationFrame.SetCurSel(frame1);
+        //ListBox_AnimationFrame.SetCurSel(frame1);
 
         if (0 > ListBox_SkillName.FindString(-1, name1))
         {
             dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->Set_Path(name1.GetString(), frame1);
+            dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->SetPos(ImgData[name1][frame1]->vPos);
         }
         else
         {
             dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->Set_Path(name1.GetString(), frame1);
+            dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->SetPos(ImgData[name1][frame1]->vPos);
         }
         
 
@@ -311,15 +314,18 @@ void CUnitTool::OnTimer(UINT_PTR nIDEvent)
     if (nIDEvent == 4 && ImgData[name2].size() != 0)
     {
         frame2 = (frame2 + 1) % ImgData[name2].size();
-        ListBox_AnimationFrame.SetCurSel(frame2);
+        //ListBox_AnimationFrame.SetCurSel(frame2);
 
         if (0 < ListBox_SkillName.FindString(-1, name2))
         {
             dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->Set_Path(name2.GetString(), frame2);
+            dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->SetPos(ImgData[name2][frame2]->vPos);
         }
         else
         {
             dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->Set_Path(name2.GetString(), frame2);
+            dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->SetPos(ImgData[name2][frame2]->vPos);
+
         }
 
         m_Scrollview->Invalidate(FALSE);
@@ -653,7 +659,7 @@ void CUnitTool::OnBnClickedButton_AnimePlay()
             }
 
             frame2 = 0;  // 애니메이션 시작 시 첫 프레임부터
-            m_Timer2 = SetTimer(4, ImgData[name1][0]->iFrameTime, NULL); // 100ms 간격으로 타이머 실행
+            m_Timer2 = SetTimer(3, ImgData[name1][0]->iFrameTime, NULL); // 100ms 간격으로 타이머 실행
         }
 
         if (name2 == L"") return;
@@ -670,7 +676,7 @@ void CUnitTool::OnBnClickedButton_AnimePlay()
             }
 
             frame1 = 0;  // 애니메이션 시작 시 첫 프레임부터
-            m_Timer1 = SetTimer(3, ImgData[name2][0]->iFrameTime, NULL); // 100ms 간격으로 타이머 실행
+            m_Timer1 = SetTimer(4, ImgData[name2][0]->iFrameTime, NULL); // 100ms 간격으로 타이머 실행
         }
 
         return;
@@ -1051,4 +1057,10 @@ void CUnitTool::OnLoad()
     }
 
     UpdateData(FALSE);
+}
+
+
+void CUnitTool::OnFreamChange()
+{
+    int a = 0;
 }

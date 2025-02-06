@@ -119,4 +119,5 @@ public:
 	UINT_PTR m_Timer1;
 	UINT_PTR m_Timer2;
 
+	afx_msg void OnFreamChange();
 };

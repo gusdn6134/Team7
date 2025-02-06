@@ -135,6 +135,29 @@ HRESULT CUnit::Init_Unit_Texture()
     INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingO1/swingO1_%d.png",
         TEX_MULTI, L"Player", L"SwingO1", 3);
 
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingO2/swingO2_%d.png",
+        TEX_MULTI, L"Player", L"SwingO2", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingO3/swingO3_%d.png",
+        TEX_MULTI, L"Player", L"SwingO3", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingOF/swingOF_%d.png",
+        TEX_MULTI, L"Player", L"SwingOF", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingP2/swingP2_%d.png",
+        TEX_MULTI, L"Player", L"SwingP2", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingPF/swingPF_%d.png",
+        TEX_MULTI, L"Player", L"SwingPF", 4);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingT1/swingT1_%d.png",
+        TEX_MULTI, L"Player", L"SwingT1", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingT2/swingT2_%d.png",
+        TEX_MULTI, L"Player", L"SwingT2", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingT3/swingT3_%d.png",
+        TEX_MULTI, L"Player", L"SwingT3", 3);
 
     INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Walk/walk1_%d.png",
         TEX_MULTI, L"Player", L"Walk", 4);
