@@ -160,6 +160,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 
+	
 };
 
 CAboutDlg::CAboutDlg() noexcept : CDialogEx(IDD_ABOUTBOX)

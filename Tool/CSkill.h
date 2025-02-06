@@ -17,6 +17,8 @@ public:
 
     HRESULT Init_Unit_Texture();
 
+    void SetPos(D3DXVECTOR3 _add) { m_tinfo.vPos = _add; }
+
     void Set_Path(const TCHAR* _pStateKey, int _id)
     {
         if (_pStateKey)
