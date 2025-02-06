@@ -3,6 +3,7 @@
 #include "Include.h"
 #include "ToolView.h"
 #include "CObj.h"
+#include "CMapTool.h"
 
 class CTerrain : public CObj
 {
@@ -18,20 +19,34 @@ public:
 
 public:
 	void	Tile_Change(const D3DXVECTOR3& vPos, const BYTE& byDrawID);
-	void	Set_MainView(CToolView* pMainView) { m_pMainView = pMainView;  }
+	void	Picking_Tile(const D3DXVECTOR3& vPos, const BYTE& byDrawID);
+
+
+	void	Set_MainView(CScrollView* pMainView) { m_pMainView = pMainView; }
 	void	Set_Ratio(D3DXMATRIX* pOut, float _fX, float _fY);
+	void	Set_vecTile(vector<TILE*>* m_Tile) { m_vecTile = m_Tile; }
+	void	Set_Picking(bool _bPicing) { m_bPicking = _bPicing; }
+	void	Set_MapSizeX(int _MapSizeX) { m_MapSizeX = _MapSizeX; }
+	void	Set_MapSizeY(int _MapSizeY) { m_MapSizeY = _MapSizeY; }
+	void	Set_ChangeIndex(int _ChangeIndex) { m_iChangeIndex = _ChangeIndex; }
 
-	void Set_vecTile(const vector<TILE*>& m_Tile) { m_vecTile = m_Tile; }
-	//vector<TILE*>& Get_vecTile() { return m_vecTile; }
+	bool	Get_Picking() { return m_bPicking; }
+	int		Get_ChangeIndex() { return m_iChangeIndex; }
+	vector<TILE*>*  Get_vecTile() { return m_vecTile; }
+	
+private:
 
 private:
-	bool	Picking(const D3DXVECTOR3& vPos, const int& iIndex);
-	bool	Picking_Dot(const D3DXVECTOR3& vPos, const int& iIndex);
-	int		Get_TileIdx(const D3DXVECTOR3& vPos);
+	int		m_iTileIndex;
+	bool	m_bPicking;
 
+	int		m_MapSizeX;
+	int		m_MapSizeY;
+	int		m_iChangeIndex;
 
 private:
-	vector<TILE*>		m_vecTile;
-	CToolView*			m_pMainView;
+	vector<TILE*>*		m_vecTile;
+	CScrollView*		m_pMainView;
+	const TEXINFO*		pTexInfo;
 };
 

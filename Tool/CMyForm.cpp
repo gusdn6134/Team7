@@ -55,10 +55,15 @@ void CMyForm::Dump(CDumpContext& dc) const
 
 // CMyForm 메시지 처리기
 
-
 void CMyForm::OnInitialUpdate()
 {
 	CFormView::OnInitialUpdate();
+
+	if (m_TabCtrl.m_hWnd == NULL)
+	{
+		m_TabCtrl.SubclassDlgItem(IDC_TAB1, this);
+	}
+
 
 	m_Font.CreatePointFont(180, L"궁서");
 
@@ -87,6 +92,7 @@ void CMyForm::OnInitialUpdate()
 	m_TabCtrl.SetCurSel(0);
 	m_MapTool.ShowWindow(SW_SHOW);	// 첫 페이지는 SHOW
 	CObjMgr::Get_Instance()->Render_ID(OBJ_BackGround, true);
+	CObjMgr::Get_Instance()->Render_ID(OBJ_Tile, true);
 
 }
 
@@ -101,6 +107,7 @@ void CMyForm::OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult)
 		m_MapTool.ShowWindow(SW_SHOW);
 		m_UnitTool.ShowWindow(SW_HIDE);
 		CObjMgr::Get_Instance()->Render_ID(OBJ_BackGround, true);
+		CObjMgr::Get_Instance()->Render_ID(OBJ_Tile, true);
 		CObjMgr::Get_Instance()->Render_ID(OBJ_Unit, false);
 		CObjMgr::Get_Instance()->Render_ID(OBJ_Effect, false);
 		break;
@@ -110,6 +117,7 @@ void CMyForm::OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult)
 		CObjMgr::Get_Instance()->Render_ID(OBJ_BackGround, false);
 		CObjMgr::Get_Instance()->Render_ID(OBJ_Unit, false);
 		CObjMgr::Get_Instance()->Render_ID(OBJ_Effect, false);
+		CObjMgr::Get_Instance()->Render_ID(OBJ_Tile, false);
 		break;
 	case 2:		
 		m_MapTool.ShowWindow(SW_HIDE);
@@ -117,6 +125,7 @@ void CMyForm::OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult)
 		CObjMgr::Get_Instance()->Render_ID(OBJ_BackGround, false);
 		CObjMgr::Get_Instance()->Render_ID(OBJ_Unit, true);
 		CObjMgr::Get_Instance()->Render_ID(OBJ_Effect, true);
+		CObjMgr::Get_Instance()->Render_ID(OBJ_Tile, false);
 		break;
 	}
 

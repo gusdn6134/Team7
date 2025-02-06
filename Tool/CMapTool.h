@@ -26,6 +26,7 @@ protected:
 public:
 	afx_msg void OnMapSizeChange();
 
+
 public:	//value
 	int m_MapSizeX;
 	int m_MapSizeY;
@@ -37,11 +38,7 @@ public: //BackGround
 
 	map<wstring, vector<TEXINFO*>> m_mutimapTex;
 	map<wstring, vector<TEXINFO*>> m_mutiTileTex;
-	
-	
 	map<CString, CImage*>		m_mapPngImage;
-
-	CBackGround* m_pBackGround;
 
 public: //TilePath
 	virtual BOOL OnInitDialog();
@@ -49,7 +46,12 @@ public: //TilePath
 	afx_msg void OnBG_ListBox();
 	afx_msg void OnTile_ListBox();
 
-	vector<TILE*>		m_vecTile;
+	CBackGround* m_pBackGround;
 	CStatic m_Picture;
+	vector<TILE*>		m_vecTile;
+	CTerrain* pTerrain;
 
+	afx_msg void OnBnClickedButton3();
+	afx_msg void OnMapTooll();
+	afx_msg void OnLoadMap();
 };

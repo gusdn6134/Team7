@@ -8,12 +8,14 @@ void Safe_Delete(T& Temp)
 		delete Temp;
 		Temp = nullptr;
 	}
+
 }
 
 template<typename T>
 unsigned long Safe_Release(T& Temp)
 {
 	unsigned long dwRefCnt = 0;
+
 
 	if (Temp)
 	{

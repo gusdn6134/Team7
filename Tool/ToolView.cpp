@@ -27,7 +27,6 @@
 
 HWND	g_hWnd;
 
-
 // CToolView
 
 IMPLEMENT_DYNCREATE(CToolView, CScrollView)
@@ -40,6 +39,7 @@ BEGIN_MESSAGE_MAP(CToolView, CScrollView)
 	ON_WM_DESTROY()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CToolView 생성/소멸
@@ -54,6 +54,7 @@ CToolView::CToolView() noexcept
 
 CToolView::~CToolView()
 {
+	int a = 0;
 }
 
 void CToolView::OnInitialUpdate()
@@ -116,6 +117,25 @@ void CToolView::OnInitialUpdate()
 
 	// 타일 생산
 	CObjMgr::Get_Instance()->AddObject(OBJ_Tile, CAbstractFactory<CTerrain>::Create());
+
+	m_pTerrain = dynamic_cast<CTerrain*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Tile)->front());
+}
+
+void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CScrollView::OnLButtonDown(nFlags, point);
+
+	GET_ScrollView
+		m_pMainView = pScrollView;
+
+	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+	{
+		m_pTerrain->Picking_Tile(D3DXVECTOR3(float(point.x), float(point.y), 0.f), m_pTerrain->Get_ChangeIndex());
+		
+		m_pMainView->Invalidate(FALSE);	
+	}
 }
 
 void CToolView::OnDraw(CDC* /*pDC*/)
@@ -135,7 +155,7 @@ void CToolView::OnDraw(CDC* /*pDC*/)
 void CToolView::OnDestroy()
 {
 	CScrollView::OnDestroy();
-
+	
 	CObjMgr::Destroy_Instance();
 	CTextureMgr::Destroy_Instance();
 	m_pDevice->Destroy_Instance();
@@ -195,6 +215,9 @@ CToolDoc* CToolView::GetDocument() const // 디버그되지 않은 버전은 인
 // CToolView 메시지 처리기
 
 #pragma endregion
+
+
+
 
 
 

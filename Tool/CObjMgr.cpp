@@ -42,8 +42,10 @@ void CObjMgr::Release()
 {
 	for (size_t i = 0; i < OBJ_END; ++i)
 	{
+		//if (i == OBJ_Tile) continue;
+
 		for_each(m_ObjList[i].begin(), m_ObjList[i].end(), Safe_Delete<CObj*>);
-		m_ObjList[i].clear();
+		//m_ObjList[i].clear();
 	}
 }
 
