@@ -21,6 +21,8 @@ HRESULT CUnit::Initialize()
 
     Init_Unit_Texture();
 
+    m_tinfo.vPos = { 400.f, 300.f, 0.f };
+
     return E_NOTIMPL;
 }
 
@@ -61,12 +63,10 @@ void CUnit::Render()
     float	fCenterY = pTexInfo->tImgInfo.Height / 2.f;
     D3DXVECTOR3	vTemp{ fCenterX, fCenterY, 0.f };
 
-    D3DXVECTOR3 vPos{ 400.f, 300.f, 0.f };
-
     CDevice::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture, //출력할 텍스처 컴객체
         nullptr,		// 출력할 이미지 영역에 대한 Rect 주소, null인 경우 이미지의 0, 0기준으로 출력
         &vTemp,		// 출력할 이미지의 중심 좌표 vec3 주소, null인 경우 0, 0 이미지 중심
-        &vPos,		// 위치 좌표에 대한 vec3 주소, null인 경우 스크린 상 0, 0 좌표 출력	
+        nullptr,		// 위치 좌표에 대한 vec3 주소, null인 경우 스크린 상 0, 0 좌표 출력	
         D3DCOLOR_ARGB(255, 255, 255, 255)); // 출력할 이미지와 섞을 색상 값, 0xffffffff를 넘겨주면 섞지 않고 원본 색상 유지
 
 }
@@ -135,6 +135,29 @@ HRESULT CUnit::Init_Unit_Texture()
     INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingO1/swingO1_%d.png",
         TEX_MULTI, L"Player", L"SwingO1", 3);
 
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingO2/swingO2_%d.png",
+        TEX_MULTI, L"Player", L"SwingO2", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingO3/swingO3_%d.png",
+        TEX_MULTI, L"Player", L"SwingO3", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingOF/swingOF_%d.png",
+        TEX_MULTI, L"Player", L"SwingOF", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingP2/swingP2_%d.png",
+        TEX_MULTI, L"Player", L"SwingP2", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingPF/swingPF_%d.png",
+        TEX_MULTI, L"Player", L"SwingPF", 4);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingT1/swingT1_%d.png",
+        TEX_MULTI, L"Player", L"SwingT1", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingT2/swingT2_%d.png",
+        TEX_MULTI, L"Player", L"SwingT2", 3);
+
+    INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/SwingT3/swingT3_%d.png",
+        TEX_MULTI, L"Player", L"SwingT3", 3);
 
     INSERT_TEXTURE(L"../MapleStory/01.Player_Resource/Motion/Walk/walk1_%d.png",
         TEX_MULTI, L"Player", L"Walk", 4);

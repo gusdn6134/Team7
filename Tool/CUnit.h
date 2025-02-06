@@ -15,6 +15,8 @@ public:
     void Render() override;
     void Release() override;
 
+    void SetPos(D3DXVECTOR3 _add) { m_tinfo.vPos = _add; }
+
     HRESULT Init_Unit_Texture();
 
    void Set_Path(const TCHAR* _pStateKey, int _id)
