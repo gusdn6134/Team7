@@ -53,10 +53,13 @@ public:
 	afx_msg void OnAddUnit();
 	afx_msg void OnAddSkill();
 
+	afx_msg void AnimePause();
+	afx_msg void OnSave();
+	afx_msg void OnLoad();
+
 public:
 	void Link_ImageKey();
 	void Link_SKillKey();
-
 
 public:
 	CScrollView* m_Scrollview;
@@ -87,11 +90,11 @@ public:
 	bool m_bIsUnitShow;
 	bool m_bIsSkillShow;
 
+	// 저장 데이터
 	map<CString, vector<IMG_INFO*>> ImgData;
 
-
+	// 수정할 이름
 	CString Edit_Name;
-
 	CListBox m_ListBox_Animation;
 	CListBox ListBox_AnimationFrame;
 
@@ -113,8 +116,7 @@ public:
 	CString name1, name2;
 	int frame1, frame2;
 
-
 	UINT_PTR m_Timer1;
 	UINT_PTR m_Timer2;
-	afx_msg void AnimePause();
+
 };

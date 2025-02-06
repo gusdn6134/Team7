@@ -81,6 +81,8 @@ BEGIN_MESSAGE_MAP(CUnitTool, CDialog)
     ON_BN_CLICKED(IDC_BUTTON10, &CUnitTool::OnAddUnit)
     ON_BN_CLICKED(IDC_BUTTON12, &CUnitTool::OnAddSkill)
     ON_BN_CLICKED(IDC_BUTTON5, &CUnitTool::AnimePause)
+    ON_BN_CLICKED(IDC_BUTTON4, &CUnitTool::OnSave)
+    ON_BN_CLICKED(IDC_BUTTON3, &CUnitTool::OnLoad)
 END_MESSAGE_MAP()
 
 
@@ -292,7 +294,16 @@ void CUnitTool::OnTimer(UINT_PTR nIDEvent)
     {
         frame1 = (frame1 + 1) % ImgData[name1].size();
         ListBox_AnimationFrame.SetCurSel(frame1);
-        dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->Set_Path(name1.GetString(), frame1);
+
+        if (0 > ListBox_SkillName.FindString(-1, name1))
+        {
+            dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->Set_Path(name1.GetString(), frame1);
+        }
+        else
+        {
+            dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->Set_Path(name1.GetString(), frame1);
+        }
+        
 
         m_Scrollview->Invalidate(FALSE);
     }
@@ -301,7 +312,15 @@ void CUnitTool::OnTimer(UINT_PTR nIDEvent)
     {
         frame2 = (frame2 + 1) % ImgData[name2].size();
         ListBox_AnimationFrame.SetCurSel(frame2);
-        dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->Set_Path(name2.GetString(), frame2);
+
+        if (0 < ListBox_SkillName.FindString(-1, name2))
+        {
+            dynamic_cast<CSkill*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Effect)->front())->Set_Path(name2.GetString(), frame2);
+        }
+        else
+        {
+            dynamic_cast<CUnit*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_Unit)->front())->Set_Path(name2.GetString(), frame2);
+        }
 
         m_Scrollview->Invalidate(FALSE);
     }
@@ -531,6 +550,7 @@ void CUnitTool::OnLbnSelchangeList_AnimeName()
     if (count == 1)
     {
         name1 = Edit_Name;
+        name2 = L"";
     }
 
     UpdateData(FALSE);
@@ -633,8 +653,9 @@ void CUnitTool::OnBnClickedButton_AnimePlay()
             }
 
             frame2 = 0;  // 애니메이션 시작 시 첫 프레임부터
-            m_Timer2 = SetTimer(4, ImgData[name2][0]->iFrameTime, NULL); // 100ms 간격으로 타이머 실행
+            m_Timer2 = SetTimer(4, ImgData[name1][0]->iFrameTime, NULL); // 100ms 간격으로 타이머 실행
         }
+
         if (name2 == L"") return;
         if (0 < ListBox_SkillName.FindString(-1, name2)) return;
         if (0 < ListBox_ImageKey.FindString(-1, name2))
@@ -645,11 +666,11 @@ void CUnitTool::OnBnClickedButton_AnimePlay()
             }
             if (m_Timer1 != 0)
             {
-                KillTimer(m_Timer2);
+                KillTimer(m_Timer1);
             }
 
             frame1 = 0;  // 애니메이션 시작 시 첫 프레임부터
-            m_Timer1 = SetTimer(3, ImgData[name1][0]->iFrameTime, NULL); // 100ms 간격으로 타이머 실행
+            m_Timer1 = SetTimer(3, ImgData[name2][0]->iFrameTime, NULL); // 100ms 간격으로 타이머 실행
         }
 
         return;
@@ -853,4 +874,181 @@ void CUnitTool::OnAddSkill()
 
     UpdateData(FALSE);
 
+}
+
+
+void CUnitTool::OnSave()
+{
+    CFileDialog		Dlg(FALSE,		// TRUE(불러오기), FALSE(다른 이름으로 저장) 모드 지정
+        L"dat",		// default 확장자명
+        L"*.dat",	// 대화 상자에 표시될 최초 파일명
+        OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,	// 읽기 전용 체크 박스 숨김 | 중복된 이름으로 파일 저장 시 경고 메세지 띄움
+        L"Data Files(*.dat) | *.dat ||", // 대화 상자에 표시될 파일 형식
+        this);	// 부모 윈도우 주소
+
+    // DoModal : 대화 상자를 실행
+
+    TCHAR	szPath[MAX_PATH] = L"";
+
+    // 현재 프로젝트의 경로를 얻어오는 함수(절대 경로)
+    GetCurrentDirectory(MAX_PATH, szPath);
+
+    // PathRemoveFileSpec : 전체 경로에서 파일 이름만 잘라주는 함수
+    // 경로 상에 파일 이름이 없을 경우엔 마지막 폴더명을 잘라낸다.
+
+    PathRemoveFileSpec(szPath);
+
+    lstrcat(szPath, L"\\Data");
+
+    Dlg.m_ofn.lpstrInitialDir = szPath;
+
+    if (IDOK == Dlg.DoModal())
+    {
+        // GetPathName : 선택된 경로를 반환
+        // GetString : 원시 문자열의 형태로 반환
+
+        CString	str = Dlg.GetPathName().GetString();
+        const TCHAR* pGetPath = str.GetString();
+
+        HANDLE hFile = CreateFile(pGetPath,
+            GENERIC_WRITE,
+            0, 0,
+            CREATE_ALWAYS,
+            FILE_ATTRIBUTE_NORMAL,
+            0);
+
+        if (INVALID_HANDLE_VALUE == hFile)
+            return;
+
+        DWORD	dwByte(0), dwStrByte(0);
+        int dwVecSize(0);
+
+        for (auto& MyPair : ImgData)
+        {
+            // key 값 저장
+
+            dwStrByte = sizeof(TCHAR) * (MyPair.first.GetLength() + 1);
+
+            WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+            WriteFile(hFile, MyPair.first.GetString(), dwStrByte, &dwByte, nullptr);
+
+            // value 값 저장
+            dwVecSize = MyPair.second.size(); //벡터 사이즈
+            WriteFile(hFile, &dwVecSize, sizeof(int), &dwByte, nullptr);
+
+            for (int i = 0; i < dwVecSize; i++)
+            {
+                WriteFile(hFile, &(MyPair.second[i]->iFrameTime), sizeof(int), &dwByte, nullptr);
+                WriteFile(hFile, &(MyPair.second[i]->vPos), sizeof(D3DXVECTOR3), &dwByte, nullptr);
+                WriteFile(hFile, &(MyPair.second[i]->vSize), sizeof(D3DXVECTOR2), &dwByte, nullptr);
+            }
+        }
+        CloseHandle(hFile);
+    }
+}
+
+
+void CUnitTool::OnLoad()
+{
+    UpdateData(TRUE);
+
+    CFileDialog		Dlg(TRUE,		// TRUE(불러오기), FALSE(다른 이름으로 저장) 모드 지정
+        L"dat",		// default 확장자명
+        L"*.dat",	// 대화 상자에 표시될 최초 파일명
+        OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,	// 읽기 전용 체크 박스 숨김 | 중복된 이름으로 파일 저장 시 경고 메세지 띄움
+        L"Data Files(*.dat) | *.dat ||", // 대화 상자에 표시될 파일 형식
+        this);	// 부모 윈도우 주소
+
+    // DoModal : 대화 상자를 실행
+
+    TCHAR	szPath[MAX_PATH] = L"";
+
+    // 현재 프로젝트의 경로를 얻어오는 함수(절대 경로)
+    GetCurrentDirectory(MAX_PATH, szPath);
+
+    // PathRemoveFileSpec : 전체 경로에서 파일 이름만 잘라주는 함수
+    // 경로 상에 파일 이름이 없을 경우엔 마지막 폴더명을 잘라낸다.
+
+    PathRemoveFileSpec(szPath);
+
+    lstrcat(szPath, L"\\Data");
+
+    Dlg.m_ofn.lpstrInitialDir = szPath;
+
+    if (IDOK == Dlg.DoModal())
+    {
+        for (auto& MyPair : ImgData)
+        {
+            for(auto& value : MyPair.second)
+                delete value;
+
+            MyPair.second.clear();
+        }
+        ImgData.clear();
+
+        // ResetContent : 리스트 박스 목록 초기화 함수
+        m_ListBox_Animation.ResetContent();
+
+        CString	str = Dlg.GetPathName().GetString();
+        const TCHAR* pGetPath = str.GetString();
+
+        HANDLE hFile = CreateFile(pGetPath,
+            GENERIC_READ,
+            0, 0,
+            OPEN_EXISTING,
+            FILE_ATTRIBUTE_NORMAL,
+            0);
+
+        if (INVALID_HANDLE_VALUE == hFile)
+            return;
+
+        DWORD	dwByte(0), dwStrByte(0);
+        int dwVecSize(0);
+
+        DWORD fileSize = GetFileSize(hFile, nullptr);
+
+        while (true)
+        {
+            // key 값 로드
+
+            // 문자열 크기를 저장
+            BOOL a = ReadFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+
+            // 문자열 크기만큼 동적 할당
+            TCHAR* pName = new TCHAR[dwStrByte];
+            BOOL b = ReadFile(hFile, pName, dwStrByte, &dwByte, nullptr);
+
+            // value 값 로드
+
+            vector<IMG_INFO*> value;
+            BOOL f = ReadFile(hFile, &dwVecSize, sizeof(int), &dwByte, nullptr);
+
+
+            for (int i = 0; i < dwVecSize; i++)
+            {
+                IMG_INFO* img = new IMG_INFO();
+                BOOL c = ReadFile(hFile, &(img->iFrameTime), sizeof(int), &dwByte, nullptr);
+                BOOL d = ReadFile(hFile, &(img->vPos), sizeof(D3DXVECTOR3), &dwByte, nullptr);
+                BOOL e = ReadFile(hFile, &(img->vSize), sizeof(D3DXVECTOR2), &dwByte, nullptr);
+                value.push_back(img);
+            }
+
+
+            if (0 == dwByte)
+            {
+                delete[] pName;
+                break;
+            }
+
+            ImgData.insert({ pName, value });
+            m_ListBox_Animation.AddString(CString(pName));
+
+
+            
+        }
+
+        CloseHandle(hFile);
+    }
+
+    UpdateData(FALSE);
 }
